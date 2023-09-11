@@ -157,3 +157,54 @@ if __name__ == '__main__':
     json_string = '{"type": "Mặt sau", "name": "PHAM DUY LONG", "recent_location": "S Trà Co, Thanh Cái, Qung NInh phó Móng Khu Trang Ginl Trà Co, Thanh Móng Cál, phó", "birth_day": "03/12/2006", "id": "022206004066", "expire_date": "0v12/2031", "nationality": "Việt Nam", "origin_location": "Hải Xuan, Thành phố Móng Cái, Quảng Ninh Hải Xuán, Thành phó Móng Cá", "gender": "Nam"}'
     template(json_string)
 
+from ultralytics import YOLO
+from PIL import Image
+import cv2
+import easyocr
+
+image_path = 'data/val/15.jpg'
+
+img = cv2.imread(image_path)
+print(img.shape)
+reader = easyocr.Reader(['vi'], gpu= False)
+# Load a model
+model = YOLO("best-2.pt") 
+#  tên của nhãn
+names = model.names
+# print(names)
+results = model.predict(image_path, save=True, save_txt=True)
+
+
+def get_ocr_results(x1,y1,x2,y2,name):
+    # print(x1,x2)
+    # print(y1,y2)
+    crop = img[y1:y2, x1:x2, : ]
+    results = reader.readtext(crop)
+    result = ''
+
+    for (bbox, text, prob) in results:
+        result = result + ' '+ text
+
+    print('text:', result)
+    return result
+for r in results:
+    boxs = r.boxes
+    classes = boxs.cls
+    # print('shape',r.orig_shape)
+    # print('normalize',boxs_nomalize)
+    data ={
+
+    }
+    for idx, box in enumerate(boxs.xyxy):
+        x1,y1,x2,y2 = box.tolist()
+        name = names[int(classes[idx])]
+        if(name == 'chip_front'):
+            data['type'] = 'Mặt trước'
+            continue
+        text = get_ocr_results(int(x1), int(y1), int(x2), int(y2), name)
+        if name in data:
+            data[name] = data[name] + ' ' + text
+        else:
+            data[name] = text
+    
+    print(data)
