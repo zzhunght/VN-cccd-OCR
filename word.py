@@ -11,6 +11,7 @@ def replace_string(doc, data, old_str, new_str, data_extra=None):
             para.text = para.text.replace(old_str, new_str)
     print(data_extra)
 
+
 def so_yeu_ly_lich(path, json_string):
     doc = Document(path)
     style = doc.styles['Normal']
