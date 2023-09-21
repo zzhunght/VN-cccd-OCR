@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 16
+names: ['12so_back', '12so_front', '9so_back', '9so_front', 'birth_day', 'chip_back', 'chip_front', 'expire_date', 'gender', 'id', 'issue_date', 'issue_place', 'name', 'nationality', 'origin_location', 'recent_location']
+
+roboflow:
+  workspace: hiro-olnsr
+  project: ekyc-6air7
+  version: 1
+  license: BY-NC-SA 4.0
+  url: https://universe.roboflow.com/hiro-olnsr/ekyc-6air7/dataset/1
