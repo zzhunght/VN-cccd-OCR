@@ -12,7 +12,7 @@ const Header = ({showModalLogin,setShowModalLogin}:HeaderProps) => {
         <span className="font-bold text-32 hover:scale-125 hover:skew-y-12 hover:rotate-9 text-[#17CDEA]">2Fast</span>
       </div>
       <div className='p-2'>
-        <button className='px-6 py-3 rounded-md bg-oy text-white' onClick={(e)=>setShowModalLogin(true)}>Login</button>
+        <button className='px-6 py-3 rounded-md bg-oy text-white hidden' onClick={(e)=>setShowModalLogin(true)}>Login</button>
       </div>
     </div>
   )

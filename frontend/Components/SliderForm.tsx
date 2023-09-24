@@ -68,7 +68,7 @@ const SliderForm = ({handleDownload,handleExportExcel,setSelected,selected}:Func
     } }/>
   };
     return (
-        <div className='w-1/2 p-2' >
+        <div className='w-2/3 p-2' >
           <div>
             <Slider {...settings} >
               {items.map((item,index)=>
