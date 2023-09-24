@@ -54,7 +54,7 @@ def don_xin_dk_tam_tru(path, json_string):
     for para in doc.paragraphs:
         for run in para.runs:
             if run.bold is not True:
-                para.text = para.text.replace('Số CCCD: ................................. ', 'Số CMND: ..' + data['id'])
+                para.text = para.text.replace('Số CCCD: ................................. ', 'Số CMND: ..' + data['id']+ '...')
                 para.text = para.text.replace('Tôi tên là: ....', 'Tôi tên là: ..' + data['name'])
                 para.text = para.text.replace('Ngày sinh:....', 'Ngày sinh:..' +
                                               birth_day[0] + '/' + birth_day[1] + '/' + birth_day[2] + '   ')
@@ -95,14 +95,27 @@ def don_xin_tam_vang(path, json_string):
                     # para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:.....'+ issued_place[0]+'/'+issued_place[1]+'/'+ issued_date[2])
     doc.save(f'don_xin_tam_vang-{data["name"]}.docx')
 
-json_string = ('{"type": "Mặt sau", "name": "PHAM DUY LONG", '
+json_string = ('{"type": "Mặt sau", '
+               '"name": "PHAM DUY LONG", '
                '"recent_location": "S Trà Co, Thanh Cái, '
                'Qung NInh phó Móng Khu Trang Ginl Trà Co, Thanh Móng Cál, phó", '
-               '"birth_day": "03/12/2006", "id": "022206004066", '
+               '"birth_day": "03/12/2006", '
+               '"id": "022206004066", '
                '"expire_date": "01/12/2031", '
                '"nationality": "Việt Nam", '
                '"origin_location": "Hải Xuan, Thành phố Móng Cái, Quảng Ninh Hải Xuán, Thành phó Móng Cá", '
                '"gender": "Nam"}')
+
+json_string2 = json.dumps({'type': 'Căn cược công dân mặt trước', 'recent_location': '8, Văn Thân 103/28, Văn Thân 103/28 Phường 08, Quận 6, TP. Hồ Chí Minh', 'name': 'PHAN NGỌC TRÂM', 'id': '079192019848', 'expire_date': '06/06/2032', 'birth_day': '06/06/1992', 'origin_location': 'Phường 08, Quận 6, TP.Hồ Chí Minh Phường 08, Quận 6, TP', 'nationality': 'Việt Nam', 'gender': 'Nữ'})
+# {'type': 'Căn cược công dân mặt trước',
+# 'recent_location': '8, Văn Thân 103/28, Văn Thân 103/28 Phường 08, Quận 6, TP. Hồ Chí Minh',
+# 'name': 'PHAN NGỌC TRÂM',
+# 'id': '079192019848',
+# 'expire_date': '06/06/2032',
+# 'birth_day': '06/06/1992',
+# 'origin_location': 'Phường 08, Quận 6, TP.Hồ Chí Minh Phường 08, Quận 6, TP', '
+# nationality': 'Việt Nam', '
+# gender': 'Nữ'}
 
 
 # ======PATH=====
@@ -111,7 +124,7 @@ path_don_xin_dk_tam_tru = r'word_form/don_xin_dk_tam_tru.docx'
 path_don_xin_tam_vang = r'word_form/don_xin_tam_vang.docx'
 
 # ======Call Function=====
-so_yeu_ly_lich(path_so_yeu_ly_lich, json_string)
-don_xin_dk_tam_tru(path_don_xin_dk_tam_tru, json_string)
-don_xin_tam_vang(path_don_xin_tam_vang, json_string)
+so_yeu_ly_lich(path_so_yeu_ly_lich, json_string2)
+don_xin_dk_tam_tru(path_don_xin_dk_tam_tru, json_string2)
+don_xin_tam_vang(path_don_xin_tam_vang, json_string2)
 
