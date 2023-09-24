@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Inter;
+}
+body.showForm .main {
+    filter: blur(5px);
+    background-color: rgba(0,0,0,0.08);
+    transition: filter 1500ms ease-in-out 0ms;
+}
+.form-login {
+    transition: top 1000ms ease-in-out,
+                margin-top 1000ms ease-in-out,
+                opacity 1000ms ease-in-out
+}
+.form-register {
+    transition: left 1000ms ease-in-out,
+                margin-left 1000ms ease-in-out,
+                opacity 1000ms ease-in-out
+}
+.content {
+    @apply w-[80%] mx-auto;
+}
+.flex-center{
+    @apply flex items-center;
+}
+.flex-2center{
+    @apply flex items-center justify-center;
+}
+.flex-between{
+    @apply flex items-center justify-between
+}
+.border-1-dashed-AAAAAA{
+    @apply border border-dashed border-[#AAAAAA]
+}
+.border-2-solid-AAAAAA {
+    @apply border-[2px] border-solid border-[#AAAAAA]
+}
+.border-2-solid-blue500{
+    @apply border-[2px] border-solid border-blue-500
+}
+.slick-slider{
+    @apply p-1 
+}
+.slick-slide{
+    @apply p-1
+}
+.arrow-slider-custom-l {
+    @apply absolute top-1/2 -translate-y-1/2  w-6 h-6 p-1 cursor-pointer text-black border-none
+    outline-none left-[-25px] rounded-full
+}
+.arrow-slider-custom-r {
+    @apply absolute top-1/2 -translate-y-1/2  w-6 h-6 p-1 cursor-pointer text-black border-none
+    outline-none right-[-25px] rounded-full
+}
+.slideselected{
+    @apply bg-oy text-white border-none
+}
+
+  
