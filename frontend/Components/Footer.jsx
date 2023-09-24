@@ -12,7 +12,7 @@ const Footer = () => {
       </p>
       <p>
         <FontAwesomeIcon icon={faPhone} className='mr-2 text-gw'/>
-        Số điện thoại :<span> 0914939120</span>
+        Số điện thoại :<span> 0914939121</span>
       </p>
     </div>
   )
