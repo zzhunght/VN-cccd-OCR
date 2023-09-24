@@ -80,7 +80,6 @@ def don_xin_tam_vang(path, json_string):
         for para in doc.paragraphs:
             for run in para.runs:
                 if run.bold is not True:
-
                     para.text = para.text.replace('Số CCCD:................',
                                                   'Số CCCD: ....' + data['id'])
                     para.text = para.text.replace('Tôi tên là: ....', 'Tôi tên là: ..' + data['name'])
