@@ -38,7 +38,7 @@ def so_yeu_ly_lich(path, json_string):
                 para.text = para.text.replace('cấp ngày .…/…./……',
                                'cấp ngày ' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
                 # # para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ issued_date[0]+'/'+issued_date[1]+'/'+ issued_date[2])
-    doc.save(f'so-yeu-ly-lich-{data["name"]}.docx')
+    doc.save(f'word_save/so-yeu-ly-lich-{data["name"]}.docx')
 
 def don_xin_dk_tam_tru(path, json_string):
     doc = Document(path)
@@ -64,7 +64,7 @@ def don_xin_dk_tam_tru(path, json_string):
                 para.text = para.text.replace('Ngày:..................................................',
                                               'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
                 # para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:.....'+ issued_place[0]+'/'+issued_place[1]+'/'+ issued_date[2])
-    doc.save(f'don_xin_dk_tam_tru-{data["name"]}.docx')
+    doc.save(f'word_save/don_xin_dk_tam_tru-{data["name"]}.docx')
 
 def don_xin_tam_vang(path, json_string):
     doc = Document(path)
@@ -93,7 +93,7 @@ def don_xin_tam_vang(path, json_string):
                                                   'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' +
                                                   expire_date[2])
                     # para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:.....'+ issued_place[0]+'/'+issued_place[1]+'/'+ issued_date[2])
-    doc.save(f'don_xin_tam_vang-{data["name"]}.docx')
+    doc.save(f'word_save/don_xin_tam_vang-{data["name"]}.docx')
 
 json_string = ('{"type": "Mặt sau", '
                '"name": "PHAM DUY LONG", '
