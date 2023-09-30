@@ -157,6 +157,13 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+/data
+/dataset
+/app/assets/*
+/chroma_db
+/llm_cache
+.idea
+/runs/*
 
 # Cython debug symbols
 cython_debug/
