@@ -1,0 +1,9 @@
+/llm_cache
+/app/assets/*
+/runs/*
+/chroma_db
+/data
+/dataset
+/env
+.idea
+app/assets/*
