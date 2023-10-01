@@ -1,16 +1,11 @@
-from fastapi import FastAPI, File, UploadFile
-from pydantic import BaseModel
 from typing import List
 from PIL import Image
 import cv2
 import easyocr
-import time
 from ultralytics import YOLO
-
 from vietocr.tool.predictor import Predictor
 from vietocr.tool.config import Cfg
 from PIL import Image
-
 
 config = Cfg.load_config_from_name('vgg_transformer')
 config['cnn']['pretrained']=False
