@@ -25,7 +25,7 @@ def add_row_new(path,json_string):
     # Đường dẫn tới tệp Excel gốc
     original_path = path
     # Đường dẫn tới tệp Excel mới
-    new_path = 'new_file.xlsx'
+    new_path = '../../new_file.xlsx'
     # Tạo bản sao của tệp Excel
     shutil.copy(original_path, new_path)
     # Load workbook của tệp mới
@@ -103,7 +103,7 @@ def main():
 
 if __name__ == '__main__':
 
-    path = r'output2.xlsx'
+    path = r'../../output2.xlsx'
     json_string = '{"type": "Mặt sau", "name": "PHAM DUY LONG", "recent_location": "S Trà Co, Thanh Cái, Qung NInh phó Móng Khu Trang Ginl Trà Co, Thanh Móng Cál, phó", "birth_day": "03/12/2006", "id": "022206004066", "expire_date": "0v12/2031", "nationality": "Việt Nam", "origin_location": "Hải Xuan, Thành phố Móng Cái, Quảng Ninh Hải Xuán, Thành phó Móng Cá", "gender": "Nam"}'
     #  add json_string to new row excel
     main()

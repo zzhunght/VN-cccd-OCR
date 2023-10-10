@@ -41,3 +41,4 @@ def predict(body: PredictInput):
     processor = OCRProcessor(image_rgb)
     result = processor.predict()  
     return {"result": result}
+
