@@ -59,15 +59,18 @@ def predict(body: PredictInput):
 def predict(body: PredictInput):
     # print('item :' , body)
     # Decode base64 to an image
-    image_data = base64.b64decode(body.chip_front)
-    np_array = np.frombuffer(image_data, np.uint8)
-    image_bgr = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
-    image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
+    if body.chip_front is None or body.chip_back is None:
+        raise HTTPException(status_code=400, detail="Vui lòng điền đầy đủ 2 mặt cả trước lẫn sau!")
 
-    processor = OCRProcessor(image_rgb)
-    result = processor.predict()
-    so_yeu_ly_lich(json.dumps(result))
-    return {"result": "done>?"}
+    chip_back_img = img_process_b64_to_rgb(body.chip_back)
+    chip_front_img = img_process_b64_to_rgb(body.chip_front)
+
+    processor1 = OCRProcessor(chip_front_img)
+    processor2 = OCRProcessor(chip_back_img)
+    result_front = processor1.predict()
+    result_back = processor2.predict()
+    so_yeu_ly_lich(json.dumps(result_front), json.dumps(result_back))
+    return {""}
 
 @app.post("/word-tamvang")
 def predict(body: PredictInput):

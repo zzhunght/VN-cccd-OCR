@@ -11,11 +11,24 @@ export default function Home() {
   const handleDownload = async (e: MouseEvent) => {
     setShowForm(true);
   };
+
+  function convertToBase64() {
+    const chip_front64 =  (imageSrc[0] as string).split(',')[1];
+    const chip_back64 =  (imageSrc[1] as string).split(',')[1];
+
+    return {
+      chip_front64,
+      chip_back64
+    };
+  }
+
   const handleExportExcel = async (e: MouseEvent) => {
-    if (imageSrc.length !== 2) {
-      alert("thiếu ảnh kìa thằng lozz"); // lát tao làm warning sau
-    }
-    console.log(imageSrc); //data là 2 file ảnh lưu trong biến imageSrc
+    // if (imageSrc.length !== 2) {
+    //   alert("thiếu ảnh kìa thằng lozz"); // lát tao làm warning sau
+    // } WARNING: lát tao làm warning sau
+    
+    console.log(convertToBase64().chip_front64 ); 
+    console.log(convertToBase64().chip_back64 ); 
     //xử lí ở đây
     setImageSrc([]); // xong rồi reset lại
   };

@@ -13,15 +13,19 @@ def check_exists(path):
         print('false')
         return False
 
-def so_yeu_ly_lich(json_string):
-    doc = Document(r'handle/word_form/so-yeu-ly-lich.docx')
+def so_yeu_ly_lich(front_string, back_string):
+    doc = Document(r'app\handle\word_form\so-yeu-ly-lich.docx')
+
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Time New Roman'
     font.size = Pt(12)
-    data = json.loads(json_string)
+    data = json.loads(front_string)
+    dataB = json.loads(back_string)
     birth_day = data['birth_day'].split('/')
     expire_date = data['expire_date'].split('/') # this is expride_date,
+    issue_date = dataB['issue_date'].split('/')
+
 
     for para in doc.paragraphs:
         for run in para.runs:
@@ -37,19 +41,21 @@ def so_yeu_ly_lich(json_string):
                 # # test expire_data == issued_data
                 para.text = para.text.replace('cấp ngày .…/…./……',
                                'cấp ngày ' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
-                # # para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ issued_date[0]+'/'+issued_date[1]+'/'+ issued_date[2])
-    doc.save(f'handle/dir_save/so-yeu-ly-lich-{data["name"]}.docx')
+                para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
+    doc.save(f'app/handle/dir_save/so-yeu-ly-lich-{data["name"]}.docx')
 
-def don_xin_dk_tam_tru(json_string):
-    doc = Document(r'handle/word_form/don_xin_dk_tam_tru.docx')
+def don_xin_dk_tam_tru(front_string, back_string):
+    doc = Document(r'app/handle/word_form/don_xin_dk_tam_tru.docx')
     # style = doc.styles['Normal']
     # font = style.font
     # font.name = 'Time New Roman'
     # font.size = Pt(12)
-    data = json.loads(json_string)
-
+    data = json.loads(front_string)
+    dataB = json.loads(back_string)
     birth_day = data['birth_day'].split('/')
     expire_date = data['expire_date'].split('/')  # this is expride_date,
+    issue_date = dataB['issue_date'].split('/')
+
 
     for para in doc.paragraphs:
         for run in para.runs:
@@ -63,18 +69,20 @@ def don_xin_dk_tam_tru(json_string):
                 # test expire_data == issued_data
                 para.text = para.text.replace('Ngày:..................................................',
                                               'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
-                # para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:.....'+ issued_place[0]+'/'+issued_place[1]+'/'+ issued_date[2])
-    doc.save(f'handle/dir_save/don_xin_dk_tam_tru-{data["name"]}.docx')
+                para.text = para.text.replace('Ngày cấp:..................................................', 'Ngày cấp:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
+    doc.save(f'app/handle/dir_save/don_xin_dk_tam_tru-{data["name"]}.docx')
 
-def don_xin_tam_vang(json_string):
-    doc = Document(r'handle/word_form/don_xin_tam_vang.docx')
+def don_xin_tam_vang(front_string, back_string):
+    doc = Document(r'app/handle/word_form/don_xin_tam_vang.docx')
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Time New Roman'
     font.size = Pt(12)
-    data = json.loads(json_string)
+    data = json.loads(front_string)
+    dataB = json.loads(back_string)
     birth_day = data['birth_day'].split('/')
     expire_date = data['expire_date'].split('/')  # this is expride_date,
+    issue_date = dataB['issue_date'].split('/')
 
     for para in doc.paragraphs:
         for para in doc.paragraphs:
@@ -91,27 +99,27 @@ def don_xin_tam_vang(json_string):
                     para.text = para.text.replace('Ngày:.....',
                                                   'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' +
                                                   expire_date[2])
-                    # para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:.....'+ issued_place[0]+'/'+issued_place[1]+'/'+ issued_date[2])
-    doc.save(f'handle/dir_save/don_xin_tam_vang-{data["name"]}.docx')
-
-json_string = ('{"type": "Mặt sau", '
-               '"name": "PHAM DUY LONG", '
-               '"recent_location": "S Trà Co, Thanh Cái, '
-               'Qung NInh phó Móng Khu Trang Ginl Trà Co, Thanh Móng Cál, phó", '
-               '"birth_day": "03/12/2006", '
-               '"id": "022206004066", '
-               '"expire_date": "01/12/2031", '
-               '"nationality": "Việt Nam", '
-               '"origin_location": "Hải Xuan, Thành phố Móng Cái, Quảng Ninh Hải Xuán, Thành phó Móng Cá", '
-               '"gender": "Nam"}')
-
-json_string2 = json.dumps({'type': 'Căn cược công dân mặt trước', 'recent_location': '8, Văn Thân 103/28, Văn Thân 103/28 Phường 08, Quận 6, TP. Hồ Chí Minh', 'name': 'PHAN NGỌC TRÂM', 'id': '079192019848', 'expire_date': '06/06/2032', 'birth_day': '06/06/1992', 'origin_location': 'Phường 08, Quận 6, TP.Hồ Chí Minh Phường 08, Quận 6, TP', 'nationality': 'Việt Nam', 'gender': 'Nữ'})
+                    para.text = para.text.replace('Cấp tại:............................. ', 'Cấp tại:...'+ dataB['issue_place'] + "..")
+                    para.text = para.text.replace('Ngày:.....', 'Ngày:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
+    doc.save(f'app/handle/dir_save/don_xin_tam_vang-{data["name"]}.docx')
 
 
+json_string2 = json.dumps({'type': 'Căn cược công dân mặt trước',
+                           'recent_location': '8, Văn Thân 103/28, Văn Thân 103/28 Phường 08, Quận 6, TP. Hồ Chí Minh',
+                           'name': 'PHAN NGỌC TRÂM',
+                           'id': '079192019848',
+                           'expire_date': '06/06/2032', 'birth_day': '06/06/1992', 'origin_location': 'Phường 08, Quận 6, TP.Hồ Chí Minh Phường 08, Quận 6, TP', 'nationality': 'Việt Nam', 'gender': 'Nữ'})
+
+back = json.dumps({
+            'type': 'Căn cược công dân mặt sau',
+            'issue_place': 'CỤC TRƯỞNG CỤC CẢNH SÁT QUẢN LÝ HÀNH CHÍNH VỀ TRẬT TỰ XÃ HỘI',
+            'issue_date': '13/05/2021'
+})
 # ======PATH=====
 
 # ======Call Function=====
-# so_yeu_ly_lich(json_string2)
-# don_xin_dk_tam_tru(json_string2)
-# don_xin_tam_vang(json_string2)
+# so_yeu_ly_lich(json_string2, back)  /// add issue_data 
+# don_xin_dk_tam_tru(json_string2, back)
+# check_exists("app\handle\word_form\so-yeu-ly-lich.docx")
+# don_xin_tam_vang(json_string2, back)
 
