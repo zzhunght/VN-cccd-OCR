@@ -15,7 +15,7 @@ export default function Home() {
   }
   const handleExportExcel = async (e:MouseEvent) =>{
     console.log(convertToBase64().chip_front64)
-    const data = {chip_front : convertToBase64().chip_front64}
+    const data = {chip_front : convertToBase64()}
     
     try {
       const response = await fetch('http://127.0.0.1:8000/excel-one', {
