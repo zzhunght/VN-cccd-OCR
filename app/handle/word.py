@@ -111,7 +111,7 @@ json_string2 = json.dumps({'type': 'Căn cược công dân mặt trước', 're
 # ======PATH=====
 
 # ======Call Function=====
-so_yeu_ly_lich(json_string2)
+# so_yeu_ly_lich(json_string2)
 # don_xin_dk_tam_tru(json_string2)
 # don_xin_tam_vang(json_string2)
 

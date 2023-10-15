@@ -33,6 +33,8 @@ class OCRProcessor:
         process_data = {}
         # giu lai type
         process_data['type'] = data['type']
+
+
         del data['type']
         for key in data:
             data[key].sort(key=lambda x: x[0])
@@ -40,10 +42,13 @@ class OCRProcessor:
             for item in data[key]:
                 join_text = join_text + item[1] + ' '
 
-            print('key: ', key)
-            print('text: ', join_text)
+            # print('key: ', key)
+            # print('text: ', join_text)
             process_data[key] = join_text.rstrip()
 
+        if process_data['type'] == 'Căn cược công dân mặt sau':
+            # print('>>>>>>>>>>>>>>>>>>>>>>------------------------------>>>>>>>>>>>>>>')
+            process_data['issue_place']= 'CỤC TRƯỞNG CỤC CẢNH SÁT QUẢN LÝ HÀNH CHÍNH VỀ TRẬT TỰ XÃ HỘI'
         return process_data
 
     def predict(self, image_path=None):
@@ -70,13 +75,17 @@ class OCRProcessor:
                     continue
                 if(name == '9so_back'):
                     data['type'] = 'CMND mặt sau'
+                if(name == 'chip_back'):
+                    data['type'] = 'Căn cược công dân mặt sau'
                     continue
                 # text = get_ocr_results(int(x1), int(y1), int(x2), int(y2), name)
-                print(int(x1), int(y1), int(x2), int(y2))
+                # print(int(x1), int(y1), int(x2), int(y2))
                 text = self.get_ocr_results(int(x1), int(y1), int(x2), int(y2), name)
 
                 if name in data:
                     data[name].append([int(y1), text])
                 else:
                     data[name] = [[int(y1), text]]
+            print(data)
+            
             return self.process_data(data)
