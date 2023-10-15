@@ -5,7 +5,7 @@ import os
 
 # Mở tài liệu Word
 
-path = r'word_form/xinduong.docx'
+path = r'app/handle/word_form/xinduong.docx'
 
 def check_exists(path):
     exists = os.path.exists(path)

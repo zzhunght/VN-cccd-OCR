@@ -29,7 +29,7 @@ const SliderForm = ({handleDownload,handleExportExcel,setSelected,selected}:Func
     " onClick={onClick}>
       <FontAwesomeIcon icon={faArrowLeft}/>
     </button>
-  ); 
+  );
   const CustomNextButton = ({onClick}:CustomSlideButtonProps) => (
     <button className="arrow-slider-custom-r" onClick={onClick}>
      <FontAwesomeIcon icon={faArrowRight}/>
@@ -42,15 +42,15 @@ const SliderForm = ({handleDownload,handleExportExcel,setSelected,selected}:Func
     { content: 'Slide 4' },
     { content: 'Slide 5' },
     { content: 'Slide 6' },
-    { content: 'Slide 6' },
-    { content: 'Slide 6' },
+    { content: 'Slide 7' },
+    { content: 'Slide 8' },
     { content: 'Slide 9' },
   ];
-  const settings = {  
+  const settings = {
     dots:true,  //setting slider
     slidesToShow: 4,
     slidesToScroll: 1,
-    draggable: true, 
+    draggable: true,
     arrow:true,
     initialSlide:0,
     speed:200,
@@ -78,13 +78,13 @@ const SliderForm = ({handleDownload,handleExportExcel,setSelected,selected}:Func
                  <h4>{item.content}</h4>
               </div>
               )}
-            </Slider> 
-          </div> 
+            </Slider>
+          </div>
           <div className='mt-10 flex-2center  gap-5 text-white'>
             <button onClick={handleExportExcel} className='bg-g py-2 px-3 rounded-md'>Xuất excel</button>
             <button onClick={handleDownload}className='bg-oy py-2 px-3 rounded-md'>Tải về biểu mẫu thông tin</button>
           </div>
-        </div> 
+        </div>
   )
 }
 
