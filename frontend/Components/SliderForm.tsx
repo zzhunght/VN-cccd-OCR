@@ -1,91 +1,149 @@
-"use client"
-import React , {useState} from 'react'
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-interface FunctionProps {
-  handleDownload: (e: any) => void; // giờ để tạm any để không lỗi mốt tao fix lại sao
-  handleExportExcel: (e: any) => void;
-  setSelected : (n:number) => void;
-  selected : number
-}
-interface CustomSlideButtonProps {
-  onClick: () => void;
-}
-const SliderForm = ({handleDownload,handleExportExcel,setSelected,selected}:FunctionProps) => {
- //slide nào được chọn thì 2light
-  const handleSelected = async (e:Event,index:number)=>{
-    if(selected === index){
-      setSelected(-1)
-    }
-    else{
-      setSelected(index)
-    }
-  }
-  const CustomPrevButton = ({ onClick }:CustomSlideButtonProps) => ( //custom lại 2 cái nút chuyển slide
-    <button className="arrow-slider-custom-l
-    " onClick={onClick}>
-      <FontAwesomeIcon icon={faArrowLeft}/>
-    </button>
-  ); 
-  const CustomNextButton = ({onClick}:CustomSlideButtonProps) => (
-    <button className="arrow-slider-custom-r" onClick={onClick}>
-     <FontAwesomeIcon icon={faArrowRight}/>
-    </button>
-  );
-  const items = [
-    { content: 'Slide 1' }, //fake đại data
-    { content: 'Slide 2' },
-    { content: 'Slide 3' },
-    { content: 'Slide 4' },
-    { content: 'Slide 5' },
-    { content: 'Slide 6' },
-    { content: 'Slide 6' },
-    { content: 'Slide 6' },
-    { content: 'Slide 9' },
-  ];
-  const settings = {  
-    dots:true,  //setting slider
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    draggable: true, 
-    arrow:true,
-    initialSlide:0,
-    speed:200,
-    infinite:true,
-    rows:1,
-    autoplay:true,
-    autoplaySpeed:3000,
-    pauseOnHover:true,
-    useCSS:true,
-    prevArrow:<CustomPrevButton onClick={function (): void {
-      throw new Error('Function not implemented.');
-    } }/>,
-    nextArrow:<CustomNextButton onClick={function (): void {
-      throw new Error('Function not implemented.');
-    } }/>
-  };
-    return (
-        <div className='w-2/3 p-2' >
-          <div>
-            <Slider {...settings} >
-              {items.map((item,index)=>
-              <div className={`text-center font-semibold text-16 border-2-solid-blue500 p-2 rounded-md
-              ${selected === index ? "slideselected":''}`} key={index}
-              onClick={(e:any)=>handleSelected(e,index)}>
-                 <h4>{item.content}</h4>
-              </div>
-              )}
-            </Slider> 
-          </div> 
-          <div className='mt-10 flex-2center  gap-5 text-white'>
-            <button onClick={handleExportExcel} className='bg-g py-2 px-3 rounded-md'>Xuất excel</button>
-            <button onClick={handleDownload}className='bg-oy py-2 px-3 rounded-md'>Tải về biểu mẫu thông tin</button>
-          </div>
-        </div> 
-  )
-}
+"use client";
+import React, { useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faDeleteLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
-export default SliderForm
+interface FunctionProps {
+  setSelected: (n: number) => void;
+  selected: number;
+  showForm: boolean;
+  setShowForm: (b: boolean) => void;
+  imageSrc: Array<String>;
+  setImageSrc: (I: any) => void;
+}
+// interface CustomSlideButtonProps {
+//   onClick: () => void;
+// }
+const SliderForm = ({
+  setSelected,
+  selected,
+  setShowForm,
+  showForm,
+  setImageSrc,
+  imageSrc,
+}: FunctionProps) => {
+  //slide nào được chọn thì 2light
+  const handleSelected = async (e: Event, index: number) => {
+    if (selected === index) {
+      setSelected(-1);
+    } else {
+      setSelected(index);
+    }
+  };
+  const handleSubmit = async (e: any) => {
+    if (imageSrc.length !== 2) {
+      alert("thiếu ảnh kìa thằng lozz"); // lát tao làm warning sau
+    }
+    const data = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
+    //xử lí ở đây
+    //sau khi xong thì reset
+    setSelected(-1);
+    setImageSrc([]);
+    setShowForm(false);
+  };
+  // const CustomPrevButton = (
+  //   { onClick }: CustomSlideButtonProps //custom lại 2 cái nút chuyển slide
+  // ) => (
+  //   <button
+  //     className="arrow-slider-custom-l
+  //   "
+  //     onClick={onClick}
+  //   >
+  //     <FontAwesomeIcon icon={faArrowLeft} />
+  //   </button>
+  // );
+  // const CustomNextButton = ({ onClick }: CustomSlideButtonProps) => (
+  //   <button className="arrow-slider-custom-r" onClick={onClick}>
+  //     <FontAwesomeIcon icon={faArrowRight} />
+  //   </button>
+  // );
+  const items = [
+    { content: "Sơ yếu lí lịch", url: "/Form/soyeulilich.jpg" },
+    {
+      content: "Đơn xin tạm trú tạm vắng",
+      url: "/Form/donxintamtrutamvang.jpg",
+    },
+    { content: "Đơn xin đăng kí tạm trú", url: "/Form/donxindangkytamtru.jpg" },
+  ];
+  const settings = {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    draggable: true,
+    initialSlide: 0,
+    speed: 200,
+    infinite: true,
+    rows: 1,
+    useCSS: true,
+    // dots: true, //setting slider
+    // autoplay: true,
+    // autoplaySpeed: 3000,
+    // pauseOnHover: true,
+    // prevArrow: (
+    //   <CustomPrevButton
+    //     onClick={function (): void {
+    //       throw new Error("Function not implemented.");
+    //     }}
+    //   />
+    // ),
+    // nextArrow: (
+    //   <CustomNextButton
+    //     onClick={function (): void {
+    //       throw new Error("Function not implemented.");
+    //     }}
+    //   />
+    // ),
+  };
+  return (
+    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 content shadow-2 border-1-dashed-AAAAAA bg-white">
+      <div>
+        <FontAwesomeIcon
+          icon={faDeleteLeft}
+          className="float-right text-32 text-bb cursor-pointer"
+          onClick={(e) => {
+            setShowForm(false);
+            setSelected(-1);
+          }}
+        />
+      </div>
+      <div className="pt-10 px-10">
+        <Slider {...settings}>
+          {items.map((item, index) => (
+            <div
+              className={`text-center font-semibold text-16 p-2 rounded-md pt-10 
+              ${selected === index ? "slideselected" : ""}`}
+              key={index}
+              onClick={(e: any) => handleSelected(e, index)}
+            >
+              <Image
+                src={item.url}
+                alt="error"
+                height={400}
+                width={200}
+                className="content border-1-solid-b"
+              />
+              <h4 className="py-10">{item.content}</h4>
+            </div>
+          ))}
+        </Slider>
+      </div>
+      <div className="text-center py-5 ">
+        <button
+          className="bg-oy text-white px-7 py-3 rounded-md"
+          onClick={handleSubmit}
+        >
+          Chọn
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default SliderForm;
