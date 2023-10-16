@@ -115,7 +115,7 @@ const SliderForm = ({
       </div>
       <div className="pt-10 px-10">
         <Slider {...settings}>
-          {items.map((item, index) => (
+          {items.map((item: any, index: any) => (
             <div
               className={`text-center font-semibold text-16 p-2 rounded-md pt-10 
               ${selected === index ? "slideselected" : ""}`}
