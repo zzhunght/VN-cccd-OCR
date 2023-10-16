@@ -74,39 +74,62 @@ def predict(body: PredictInput):
 
 @app.post("/word-tamvang")
 def predict(body: PredictInput):
-    # print('item :' , body)
-    # Decode base64 to an image
-    # chip_back_img = img_process_b64_to_rgb(body.chip_back)
+    if body.chip_front is None or body.chip_back is None:
+        raise HTTPException(status_code=400, detail="Vui lòng điền đầy đủ 2 mặt cả trước lẫn sau!")
+
+    chip_back_img = img_process_b64_to_rgb(body.chip_back)
     chip_front_img = img_process_b64_to_rgb(body.chip_front)
-    processor = OCRProcessor(chip_front_img)
-    result = processor.predict()
-    don_xin_tam_vang(json.dumps(result))
+
+    processor1 = OCRProcessor(chip_front_img)
+    processor2 = OCRProcessor(chip_back_img)
+    result_front = processor1.predict()
+    result_back = processor2.predict()
+    don_xin_tam_vang(json.dumps(result_front), json.dumps(result_back))
     return {"result": "done>?"}
 
 @app.post("/word-tamtru")
 def predict(body: PredictInput):
-    # print('item :' , body)
-    # Decode base64 to an image
-    image_data = base64.b64decode(body.chip_front)
-    np_array = np.frombuffer(image_data, np.uint8)
-    image_bgr = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
-    image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
+    if body.chip_front is None or body.chip_back is None:
+        raise HTTPException(status_code=400, detail="Vui lòng điền đầy đủ 2 mặt cả trước lẫn sau!")
 
-    processor = OCRProcessor(image_rgb)
-    result = processor.predict()
-    don_xin_dk_tam_tru(json.dumps(result))
+    chip_back_img = img_process_b64_to_rgb(body.chip_back)
+    chip_front_img = img_process_b64_to_rgb(body.chip_front)
+
+    processor1 = OCRProcessor(chip_front_img)
+    processor2 = OCRProcessor(chip_back_img)
+    result_front = processor1.predict()
+    result_back = processor2.predict()
+    don_xin_dk_tam_tru(json.dumps(result_front), json.dumps(result_back))
     return {"result": "done>?"}
 
 @app.post("/excel-one")
 def predict(body: PredictInput):
-    # print('item :' , body)
-    # Decode base64 to an image
-    image_data = base64.b64decode(body.chip_front)
-    np_array = np.frombuffer(image_data, np.uint8)
-    image_bgr = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
-    image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
+    if body.chip_front is None or body.chip_back is None:
+        raise HTTPException(status_code=400, detail="Vui lòng điền đầy đủ 2 mặt cả trước lẫn sau!")
 
-    processor = OCRProcessor(image_rgb)
-    result = processor.predict()
-    TrichXuat_excel(json.dumps(result))
-    return {"result": result}
+    chip_back_img = img_process_b64_to_rgb(body.chip_back)
+    chip_front_img = img_process_b64_to_rgb(body.chip_front)
+
+    processor1 = OCRProcessor(chip_front_img)
+    processor2 = OCRProcessor(chip_back_img)
+    result_front = processor1.predict()
+    result_back = processor2.predict()
+    TrichXuat_excel(json.dumps(result_front), json.dumps(result_back))
+    return {"result_front": result_front, "result_back": result_back}
+
+@app.post("/excel-existing")
+def predict(body: PredictInput):
+
+    filename = 'ajsjhdbashd.xlsx'
+    if body.chip_front is None or body.chip_back is None:
+        raise HTTPException(status_code=400, detail="Vui lòng điền đầy đủ 2 mặt cả trước lẫn sau!")
+
+    chip_back_img = img_process_b64_to_rgb(body.chip_back)
+    chip_front_img = img_process_b64_to_rgb(body.chip_front)
+
+    processor1 = OCRProcessor(chip_front_img)
+    processor2 = OCRProcessor(chip_back_img)
+    result_front = processor1.predict()
+    result_back = processor2.predict()
+    add_row_self(filename,json.dumps(result_front), json.dumps(result_back))
+    return {"result_front": result_front, "result_back": result_back}

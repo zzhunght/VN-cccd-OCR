@@ -38,7 +38,8 @@ def so_yeu_ly_lich(front_string, back_string):
                 para.text = para.text.replace('Nam/ Nữ ….…….……........', 'Nam/ Nữ …..' + data['gender'])
                 para.text = para.text.replace('Nguyên quán……', 'Nguyên quán…' + data['origin_location'])
                 para.text = para.text.replace('Chỗ ở hiện nay ……', 'Chỗ ở hiện nay...' + data['recent_location'])
-                # # test expire_data == issued_data
+                
+                para.text = para.text.replace('nơi cấp………', 'nơi cấp…....' + dataB['issue_place'])
                 para.text = para.text.replace('cấp ngày .…/…./……',
                                'cấp ngày ' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
                 para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
@@ -46,10 +47,6 @@ def so_yeu_ly_lich(front_string, back_string):
 
 def don_xin_dk_tam_tru(front_string, back_string):
     doc = Document(r'app/handle/word_form/don_xin_dk_tam_tru.docx')
-    # style = doc.styles['Normal']
-    # font = style.font
-    # font.name = 'Time New Roman'
-    # font.size = Pt(12)
     data = json.loads(front_string)
     dataB = json.loads(back_string)
     birth_day = data['birth_day'].split('/')
@@ -69,6 +66,7 @@ def don_xin_dk_tam_tru(front_string, back_string):
                 # test expire_data == issued_data
                 para.text = para.text.replace('Ngày:..................................................',
                                               'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
+                para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:...' + dataB['issue_place'])
                 para.text = para.text.replace('Ngày cấp:..................................................', 'Ngày cấp:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
     doc.save(f'app/handle/dir_save/don_xin_dk_tam_tru-{data["name"]}.docx')
 
@@ -118,7 +116,7 @@ back = json.dumps({
 # ======PATH=====
 
 # ======Call Function=====
-# so_yeu_ly_lich(json_string2, back)  /// add issue_data 
+# so_yeu_ly_lich(json_string2, back)  
 # don_xin_dk_tam_tru(json_string2, back)
 # check_exists("app\handle\word_form\so-yeu-ly-lich.docx")
 # don_xin_tam_vang(json_string2, back)
