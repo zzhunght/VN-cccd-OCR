@@ -26,6 +26,7 @@ const config: Config = {
         "1": "0 0 40px 2px rgba(128, 128, 128, 0.8)",
         "2": "0px 4px 27px rgba(0, 0, 0, 0.07)",
         "3": "0 2 5px 10px rgba(0,0,0,0.1)",
+        "4": "0px 5px 8px rgba(0 ,0 , 0, 0.08)",
       },
       fontSize: {
         "16": "16px",
@@ -38,6 +39,17 @@ const config: Config = {
         "20": "20px",
         "24": "24px",
         "32": "32px",
+      },
+      keyframes: {
+        slideLeft: {
+          "0%": { transform: "translateX(calc(100%+40px))", opacity: "0" },
+          "10%": { transform: "translateX(0)", opacity: "1" },
+          "80%": { opacity: "0.5" },
+          "100%": { opacity: "0" },
+        },
+      },
+      animation: {
+        slideLeft: "slideLeft 4s ease forwards",
       },
     },
   },

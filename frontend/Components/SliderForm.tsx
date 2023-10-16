@@ -16,12 +16,15 @@ interface FunctionProps {
   selected: number;
   showForm: boolean;
   setShowForm: (b: boolean) => void;
-  imageSrc: Array<String>;
-  setImageSrc: (I: any) => void;
+  imageSrc: Array<string>;
+  setImageSrc: (I: Array<string>) => void;
+  setWarning: (b: boolean) => void;
+  setMessage: (message: string) => void;
 }
-// interface CustomSlideButtonProps {
-//   onClick: () => void;
-// }
+interface itemProps {
+  content: string;
+  url: string;
+}
 const SliderForm = ({
   setSelected,
   selected,
@@ -29,22 +32,41 @@ const SliderForm = ({
   showForm,
   setImageSrc,
   imageSrc,
+  setWarning,
+  setMessage,
 }: FunctionProps) => {
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const minClickInterval = 4000;
   //slide nào được chọn thì 2light
-  const handleSelected = async (e: Event, index: number) => {
+  const handleSelected = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    index: number
+  ) => {
     if (selected === index) {
       setSelected(-1);
     } else {
       setSelected(index);
     }
   };
-  const handleSubmit = async (e: any) => {
-    if (imageSrc.length !== 2) {
-      alert("thiếu ảnh kìa thằng lozz"); // lát tao làm warning sau
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (imageSrc.length !== 2 || selected === -1) {
+      const currentTime = Date.now();
+      if (currentTime - lastClickTime >= minClickInterval) {
+        setWarning(true);
+        if (selected === -1) {
+          setMessage("Bạn chưa chọn loại biểu mẫu");
+        } else {
+          setMessage("Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
+        }
+        setTimeout(() => {
+          setWarning(false);
+        }, 4000); // lát tao làm warning sau
+        setLastClickTime(currentTime);
+      }
     }
     const data = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
     //xử lí ở đây
-    //sau khi xong thì reset
+    //sau khi xong thì resets
     setSelected(-1);
     setImageSrc([]);
     setShowForm(false);
@@ -102,7 +124,7 @@ const SliderForm = ({
     // ),
   };
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 content shadow-2 border-1-dashed-AAAAAA bg-white">
+    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 content shadow-2 border-1-dashed-AAAAAA bg-white">
       <div>
         <FontAwesomeIcon
           icon={faDeleteLeft}
@@ -115,19 +137,19 @@ const SliderForm = ({
       </div>
       <div className="pt-10 px-10">
         <Slider {...settings}>
-          {items.map((item, index) => (
+          {items.map((item: itemProps, index: number) => (
             <div
               className={`text-center font-semibold text-16 p-2 rounded-md pt-10 
               ${selected === index ? "slideselected" : ""}`}
               key={index}
-              onClick={(e: any) => handleSelected(e, index)}
+              onClick={(e) => handleSelected(e, index)}
             >
               <Image
                 src={item.url}
                 alt="error"
                 height={400}
                 width={200}
-                className="content border-1-solid-b"
+                className="content border-1-solid-b shadow-2"
               />
               <h4 className="py-10">{item.content}</h4>
             </div>
