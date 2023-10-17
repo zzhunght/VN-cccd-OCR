@@ -3,10 +3,10 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { ViewDirection } from "../Contants";
 interface UploadProps {
-  imageSrc: any;
-  setImageSrc: any;
-  handleDownload: (e: any) => void;
-  handleExportExcel: (e: any) => void;
+  imageSrc: Array<string>;
+  setImageSrc: (I: Array<string>) => void;
+  handleDownload: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleExportExcel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 const Upload = ({
   imageSrc,
@@ -14,17 +14,21 @@ const Upload = ({
   handleDownload,
   handleExportExcel,
 }: UploadProps) => {
-  const handleUploadImage = (e: any, index: number) => {
+  const handleUploadImage = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     console.log(e);
     // truyền index vào nếu 0 tức là ảnh mặt trước còn 1 là mặt sau
     //sau khi đọc xong lưu vào mảng imageSrc
-    if (e.target !== null) {
+    if (e.target.files !== null) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          if (e.target !== null) {
-            const CopyImageSrc = [...imageSrc];
+          if (e.target === null) return;
+          const CopyImageSrc: Array<string> = [...imageSrc];
+          if (typeof e.target.result === "string") {
             CopyImageSrc[index] = e.target.result;
             setImageSrc(CopyImageSrc);
           }
@@ -39,7 +43,7 @@ const Upload = ({
         Ảnh Căn cước công dân của bạn{" "}
       </h2>
       <div className=" flex-center gap-2 border-1-dashed-AAAAAA px-5 py-4">
-        {ViewDirection.map((item, index) => (
+        {ViewDirection.map((item: string, index: number) => (
           <div className="basis-1/2 text-center " key={index}>
             <h3 className="text-20 font-semibold my-5">{item}</h3>
             <div className="mb-5 h-[320px]">
@@ -68,8 +72,8 @@ const Upload = ({
                   accept="Image/*"
                   className="hidden"
                   onChange={(e) => handleUploadImage(e, index)}
-                  onClick={(e: any) => {
-                    e.target.value = null;
+                  onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                    (e.target as HTMLInputElement).value = "";
                   }}
                 ></input>
               </label>
