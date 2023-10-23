@@ -50,19 +50,20 @@ export default function Home() {
 
     try {
       const response = await fetch("http://127.0.0.1:8000/excel-one", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+          method: "POST",
+          headers: {
+              "Content-Type": "application/octet-stream",
+          },
+          body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+          throw new Error("Network response was not ok");
       }
 
-      const responseData = await response.json();
-      console.log("Success:", responseData);
+      const blob = await response.blob();
+      const fileUrl = window.URL.createObjectURL(blob);
+      window.open(fileUrl);
     } catch (error) {
       console.error("Error:", error);
     }
