@@ -48,6 +48,15 @@ const SliderForm = ({
       setSelected(index);
     }
   };
+  function convertToBase64() {
+    const chip_front64 = (imageSrc[0] as string).split(",")[1];
+    const chip_back64 = (imageSrc[1] as string).split(",")[1];
+
+    return {
+      chip_front64,
+      chip_back64,
+    };
+  }
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (imageSrc.length !== 2 || selected === -1) {
       const currentTime = Date.now();
@@ -64,12 +73,123 @@ const SliderForm = ({
         setLastClickTime(currentTime);
       }
     }
-    const data = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
+    const dataSelect = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
     //xử lí ở đây
+    console.log(dataSelect)
+    const data = {
+      chip_front: convertToBase64().chip_front64,
+      chip_back: convertToBase64().chip_back64,
+    };
+    console.log(data)
+
+    if (dataSelect.selected==0){
+      console.log("So yeu li lich")
+      try {
+        const response = await fetch("http://127.0.0.1:8000/word-soyeu", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        // const responseData = await response.json();
+        // console.log('Success:', responseData);
+        const blobData = await response.blob();
+        const url = URL.createObjectURL(blobData);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "SoYeuLiLich.docx";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  
+        URL.revokeObjectURL(url);
+        console.log("File docx tải về thành công");
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    
+    if (dataSelect.selected==1){
+      console.log("Tam tru tam vang")
+      try {
+        const response = await fetch("http://127.0.0.1:8000/word-tamvang", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        // const responseData = await response.json();
+        // console.log('Success:', responseData);
+        const blobData = await response.blob();
+        const url = URL.createObjectURL(blobData);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "DonXinTamVang.docx";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  
+        URL.revokeObjectURL(url);
+        console.log("File docx tải về thành công");
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    
+    if (dataSelect.selected==2){
+      console.log("dang ky tam tru")
+      try {
+        const response = await fetch("http://127.0.0.1:8000/word-tamtru", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        // const responseData = await response.json();
+        // console.log('Success:', responseData);
+        const blobData = await response.blob();
+        const url = URL.createObjectURL(blobData);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "DonDangKiTamTru.docx";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  
+        URL.revokeObjectURL(url);
+        console.log("File docx tải về thành công");
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
     //sau khi xong thì resets
-    setSelected(-1);
-    setImageSrc([]);
-    setShowForm(false);
+    // setSelected(-1);
+    // setImageSrc([]);
+    // setShowForm(false);
   };
   // const CustomPrevButton = (
   //   { onClick }: CustomSlideButtonProps //custom lại 2 cái nút chuyển slide

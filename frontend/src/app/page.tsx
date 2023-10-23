@@ -72,6 +72,10 @@ export default function Home() {
 
       URL.revokeObjectURL(url);
       console.log("File tải về thành công");
+
+      setSelected(-1);
+      setImageSrc([]);
+      setShowForm(false);
     } catch (error) {
       console.error("Error:", error);
     }
