@@ -25,7 +25,7 @@ def TrichXuat_excel(json_front, json_back):
     df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=False)
 
 def add_row_self(filename, json_front, json_back):
-    workbook = load_workbook(f'handle/dir_save/{filename}')
+    workbook = load_workbook(f'handle/temp_folder/{filename}')
     # Select the active sheet
     sheet = workbook.active
     # Chuyển chuỗi JSON thành đối tượng Python

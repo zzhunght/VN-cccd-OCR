@@ -1,15 +1,19 @@
+from asyncio import SendfileNotAvailableError
 import base64
 import json
 
+import os
+
 import cv2
+from fastapi.responses import FileResponse
 import numpy as np
 
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Response, UploadFile
 app = FastAPI()
 from model.model import OCRProcessor
 from handle.word import don_xin_tam_vang, don_xin_dk_tam_tru, so_yeu_ly_lich
-from handle.excel import TrichXuat_excel
+from handle.excel import TrichXuat_excel, add_row_self
 from schema.schema import PredictInput
 
 from helper.func import img_process_b64_to_rgb
@@ -70,7 +74,8 @@ def predict(body: PredictInput):
     result_front = processor1.predict()
     result_back = processor2.predict()
     so_yeu_ly_lich(json.dumps(result_front), json.dumps(result_back))
-    return {""}
+    file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\so-yeu-ly-lich.docx'
+    return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 @app.post("/word-tamvang")
 def predict(body: PredictInput):
@@ -85,7 +90,9 @@ def predict(body: PredictInput):
     result_front = processor1.predict()
     result_back = processor2.predict()
     don_xin_tam_vang(json.dumps(result_front), json.dumps(result_back))
-    return {"result": "done>?"}
+    file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_tam_vang.docx'
+    return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
 
 @app.post("/word-tamtru")
 def predict(body: PredictInput):
@@ -100,7 +107,8 @@ def predict(body: PredictInput):
     result_front = processor1.predict()
     result_back = processor2.predict()
     don_xin_dk_tam_tru(json.dumps(result_front), json.dumps(result_back))
-    return {"result": "done>?"}
+    file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_dk_tam_tru.docx'
+    return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 @app.post("/excel-one")
 def predict(body: PredictInput):
@@ -115,8 +123,10 @@ def predict(body: PredictInput):
     result_front = processor1.predict()
     result_back = processor2.predict()
     TrichXuat_excel(json.dumps(result_front), json.dumps(result_back))
-    return {"result_front": result_front, "result_back": result_back}
+    file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTin.xlsx'
+    return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
+    # chua duoc su dung 
 @app.post("/excel-existing")
 def predict(body: PredictInput):
 
@@ -132,4 +142,5 @@ def predict(body: PredictInput):
     result_front = processor1.predict()
     result_back = processor2.predict()
     add_row_self(filename,json.dumps(result_front), json.dumps(result_back))
-    return {"result_front": result_front, "result_back": result_back}
+    file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTin.xlsx'
+    return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

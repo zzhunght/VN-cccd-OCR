@@ -14,8 +14,7 @@ def check_exists(path):
         return False
 
 def so_yeu_ly_lich(front_string, back_string):
-    doc = Document(r'app\handle\word_form\so-yeu-ly-lich.docx')
-
+    doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\so-yeu-ly-lich.docx')
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Time New Roman'
@@ -43,10 +42,11 @@ def so_yeu_ly_lich(front_string, back_string):
                 para.text = para.text.replace('cấp ngày .…/…./……',
                                'cấp ngày ' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
                 para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
-    doc.save(f'app/handle/dir_save/so-yeu-ly-lich-{data["name"]}.docx')
+    doc.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\so-yeu-ly-lich.docx')
+    print('saved')
 
 def don_xin_dk_tam_tru(front_string, back_string):
-    doc = Document(r'app/handle/word_form/don_xin_dk_tam_tru.docx')
+    doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\don_xin_dk_tam_tru.docx')
     data = json.loads(front_string)
     dataB = json.loads(back_string)
     birth_day = data['birth_day'].split('/')
@@ -68,10 +68,12 @@ def don_xin_dk_tam_tru(front_string, back_string):
                                               'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
                 para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:...' + dataB['issue_place'])
                 para.text = para.text.replace('Ngày cấp:..................................................', 'Ngày cấp:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
-    doc.save(f'app/handle/dir_save/don_xin_dk_tam_tru-{data["name"]}.docx')
+    # doc.save(f'app/handle/dir_save/don_xin_dk_tam_tru-{data["name"]}.docx')
+    doc.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_dk_tam_tru.docx')
+    print("saved")
 
 def don_xin_tam_vang(front_string, back_string):
-    doc = Document(r'app/handle/word_form/don_xin_tam_vang.docx')
+    doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\don_xin_tam_vang.docx')
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Time New Roman'
@@ -99,7 +101,8 @@ def don_xin_tam_vang(front_string, back_string):
                                                   expire_date[2])
                     para.text = para.text.replace('Cấp tại:............................. ', 'Cấp tại:...'+ dataB['issue_place'] + "..")
                     para.text = para.text.replace('Ngày:.....', 'Ngày:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
-    doc.save(f'app/handle/dir_save/don_xin_tam_vang-{data["name"]}.docx')
+    doc.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_tam_vang.docx')
+    print("save")
 
 
 json_string2 = json.dumps({'type': 'Căn cược công dân mặt trước',
@@ -118,6 +121,6 @@ back = json.dumps({
 # ======Call Function=====
 # so_yeu_ly_lich(json_string2, back)  
 # don_xin_dk_tam_tru(json_string2, back)
-# check_exists("app\handle\word_form\so-yeu-ly-lich.docx")
+check_exists(r"D:\learn\VN-cccd-OCR\app\handle\word_form\don_xin_tam_vang.docx")
 # don_xin_tam_vang(json_string2, back)
 
