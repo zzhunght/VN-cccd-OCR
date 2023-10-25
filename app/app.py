@@ -115,7 +115,7 @@ def predict(body: PredictInput):
     result_front = processor1.predict()
     result_back = processor2.predict()
     TrichXuat_excel(json.dumps(result_front), json.dumps(result_back))
-    return {"result_front": result_front, "result_back": result_back}
+    return {"result_front": result_front, "result_back": result_back }
 
 @app.post("/excel-existing")
 def predict(body: PredictInput):

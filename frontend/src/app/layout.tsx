@@ -8,6 +8,7 @@ import Login from "../../Components/Login";
 import Register from "../../Components/Register";
 import { Roboto } from "next/font/google";
 import { useState } from "react";
+import Loading from "./../../Components/Loading";
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400"],
