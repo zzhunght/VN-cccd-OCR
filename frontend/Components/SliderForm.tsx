@@ -21,6 +21,8 @@ interface FunctionProps {
   setWarning: (b: boolean) => void;
   setMessage: (message: string) => void;
   setStatus: (s: string) => void;
+  loading: boolean;
+  setLoading: (b: boolean) => void;
 }
 interface CustomSlideButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -39,6 +41,8 @@ const SliderForm = ({
   setWarning,
   setMessage,
   setStatus,
+  loading,
+  setLoading,
 }: FunctionProps) => {
   // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // const [changeSetting, setChangeSetting] = useState({});
@@ -75,8 +79,10 @@ const SliderForm = ({
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (imageSrc.length !== 2 || selected === -1) {
+      //kiểm tra xem đã đủ 2 ảnh và đã chọn biểu mẫu chưa
       const currentTime = Date.now();
       if (currentTime - lastClickTime >= minClickInterval) {
+        //set 4 giây cách nhau giữa 2 thông báo
         setWarning(true);
         if (selected === -1) {
           setMessage("Bạn chưa chọn loại biểu mẫu");
@@ -87,16 +93,21 @@ const SliderForm = ({
         }
         setTimeout(() => {
           setWarning(false);
-        }, 4000); // lát tao làm warning sau
+        }, 4000); //tắt đi thông báo
         setLastClickTime(currentTime);
       }
     }
     const data = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
-    //xử lí ở đây
+    setLoading(true); //tạo loading
+    //xử lí gọi API ở đây
     //sau khi xong thì resets
+    setLoading(false); //tắt loading
+    setWarning(true);
+    setStatus("Success"); //hiển thị thông báo thành công
+    setMessage("Thành công");
     setSelected(-1);
-    setImageSrc([]);
-    setShowForm(false);
+    setImageSrc([]); //reset lại biểu mẫu và ảnh
+    setShowForm(false); //tắt slide
   };
   const CustomPrevButton = (
     { onClick }: CustomSlideButtonProps //custom lại 2 cái nút chuyển slide

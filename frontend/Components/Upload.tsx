@@ -16,6 +16,7 @@ const Upload = ({
 }: UploadProps) => {
   const [excelFile, setExcelFile] = useState("");
   const handleUploadExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //lưu file excel vào biến excelFile
     if (e.target.files !== null) {
       const file = e.target.files[0];
       if (file) {
@@ -30,6 +31,7 @@ const Upload = ({
         reader.readAsDataURL(file);
       }
     }
+    //có file excel rồi mày lấy kèm 2 cái ảnh rồi gọi API như bên kia nhé
   };
   const handleUploadImage = (
     e: React.ChangeEvent<HTMLInputElement>,

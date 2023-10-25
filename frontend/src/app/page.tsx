@@ -4,7 +4,7 @@ import Introduction from "../../Components/Introduction";
 import Upload from "../../Components/Upload";
 import SliderForm from "../../Components/SliderForm";
 import Guide from "../../Components/Guide";
-import Warning from "./../../Components/Warning";
+import Notification from "../../Components/Notification";
 import Loading from "../../Components/Loading";
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function Home() {
   const [lastClickTime, setLastClickTime] = useState(0);
   const minClickInterval = 4000;
   const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setShowForm(true);
+    setShowForm(true); //hiển thị form chọn các biểu mẫu như sơ yếu ,....
   };
 
   function convertToBase64() {
@@ -31,9 +31,12 @@ export default function Home() {
   }
 
   const handleExportExcel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    //xuất excel
     if (imageSrc.length !== 2) {
+      //kiểm tra xem đã đủ 2 ảnh chưa
       const currentTime = Date.now();
       if (currentTime - lastClickTime >= minClickInterval) {
+        // set để warning hiển thị cách nhau mỗi 4 giây
         setWarning(true);
         setMessage("Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
         setStatus("Warning");
@@ -43,11 +46,12 @@ export default function Home() {
         setLastClickTime(currentTime);
       }
     } else {
-      setLoading(true);
+      //nếu đã cung cấp đủ ảnh thì xuống đây
+      setLoading(true); // tạo loading
       const data = {
         chip_front: convertToBase64().chip_front64,
         chip_back: convertToBase64().chip_back64,
-      };
+      }; //data
 
       try {
         const response = await fetch("http://127.0.0.1:8000/excel-one", {
@@ -57,26 +61,37 @@ export default function Home() {
           },
           body: JSON.stringify(data),
         });
-
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          setWarning(true);
+          setStatus("Failed"); //hiển thị thông báo có lỗi
+          setMessage("Có lỗi vui lòng thử lại sau");
+          setLoading(false);
         }
-
         const responseData = await response.json();
         console.log("Success:", responseData);
-        setLoading(false);
+        setLoading(false); //tắt loading đi sau khi thành công
         setWarning(true);
-        setStatus("Success");
+        setStatus("Success"); //hiển thị thông báo thành công
         setMessage("Thành công");
+        //reset lại ảnh
+        setImageSrc([]);
       } catch (error) {
         console.error("Error:", error);
+        setLoading(false); //tắt kể cả khi thất bại
+        setWarning(true);
+        setStatus("Failed"); //hiển thị thông báo có lỗi
+        setMessage("Có lỗi vui lòng thử lại sau");
       }
     }
   };
   return (
     <div className="content">
       {warning ? (
-        <Warning setWarning={setWarning} message={message} status={status} />
+        <Notification
+          setWarning={setWarning}
+          message={message}
+          status={status}
+        />
       ) : (
         ""
       )}
@@ -91,6 +106,8 @@ export default function Home() {
           imageSrc={imageSrc}
           setImageSrc={setImageSrc}
           setStatus={setStatus}
+          loading={loading}
+          setLoading={setLoading}
         />
       ) : (
         ""
