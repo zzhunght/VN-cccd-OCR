@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -20,6 +20,12 @@ interface FunctionProps {
   setImageSrc: (I: Array<string>) => void;
   setWarning: (b: boolean) => void;
   setMessage: (message: string) => void;
+  setStatus: (s: string) => void;
+  loading: boolean;
+  setLoading: (b: boolean) => void;
+}
+interface CustomSlideButtonProps {
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 interface itemProps {
   content: string;
@@ -34,9 +40,32 @@ const SliderForm = ({
   imageSrc,
   setWarning,
   setMessage,
+  setStatus,
+  loading,
+  setLoading,
 }: FunctionProps) => {
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // const [changeSetting, setChangeSetting] = useState({});
   const [lastClickTime, setLastClickTime] = useState(0);
   const minClickInterval = 4000;
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     console.log(window.innerWidth);
+  //     setWindowWidth(window.innerWidth);
+  //     console.log(windowWidth);
+  //   };
+  //   if (windowWidth >= 768) {
+  //     setChangeSetting({ ...settings });
+  //   } else {
+  //     setChangeSetting({ ...settings1 });
+  //   }
+  //   // Đăng ký sự kiện lắng nghe thay đổi kích thước màn hình
+  //   window.addEventListener("resize", handleResize);
+  //   // Hủy đăng ký sự kiện khi component bị unmount
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, [windowWidth]);
   //slide nào được chọn thì 2light
   const handleSelected = async (
     e: React.MouseEvent<HTMLDivElement>,
@@ -59,17 +88,21 @@ const SliderForm = ({
   }
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (imageSrc.length !== 2 || selected === -1) {
+      //kiểm tra xem đã đủ 2 ảnh và đã chọn biểu mẫu chưa
       const currentTime = Date.now();
       if (currentTime - lastClickTime >= minClickInterval) {
+        //set 4 giây cách nhau giữa 2 thông báo
         setWarning(true);
         if (selected === -1) {
           setMessage("Bạn chưa chọn loại biểu mẫu");
+          setStatus("Warning");
         } else {
           setMessage("Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
+          setStatus("Warning");
         }
         setTimeout(() => {
           setWarning(false);
-        }, 4000); // lát tao làm warning sau
+        }, 4000); //tắt đi thông báo
         setLastClickTime(currentTime);
       }
     }
@@ -190,23 +223,34 @@ const SliderForm = ({
     // setSelected(-1);
     // setImageSrc([]);
     // setShowForm(false);
+    // const data = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
+    setLoading(true); //tạo loading
+    //xử lí gọi API ở đây
+    //sau khi xong thì resets
+    setLoading(false); //tắt loading
+    setWarning(true);
+    setStatus("Success"); //hiển thị thông báo thành công
+    setMessage("Thành công");
+    setSelected(-1);
+    setImageSrc([]); //reset lại biểu mẫu và ảnh
+    setShowForm(false); //tắt slide
   };
-  // const CustomPrevButton = (
-  //   { onClick }: CustomSlideButtonProps //custom lại 2 cái nút chuyển slide
-  // ) => (
-  //   <button
-  //     className="arrow-slider-custom-l
-  //   "
-  //     onClick={onClick}
-  //   >
-  //     <FontAwesomeIcon icon={faArrowLeft} />
-  //   </button>
-  // );
-  // const CustomNextButton = ({ onClick }: CustomSlideButtonProps) => (
-  //   <button className="arrow-slider-custom-r" onClick={onClick}>
-  //     <FontAwesomeIcon icon={faArrowRight} />
-  //   </button>
-  // );
+  const CustomPrevButton = (
+    { onClick }: CustomSlideButtonProps //custom lại 2 cái nút chuyển slide
+  ) => (
+    <button
+      className="arrow-slider-custom-l
+    "
+      onClick={onClick}
+    >
+      <FontAwesomeIcon icon={faArrowLeft} />
+    </button>
+  );
+  const CustomNextButton = ({ onClick }: CustomSlideButtonProps) => (
+    <button className="arrow-slider-custom-r" onClick={onClick}>
+      <FontAwesomeIcon icon={faArrowRight} />
+    </button>
+  );
   const items = [
     { content: "Sơ yếu lí lịch", url: "/Form/soyeulilich.jpg" },
     {
@@ -217,34 +261,41 @@ const SliderForm = ({
   ];
   const settings = {
     slidesToShow: 3,
-    slidesToScroll: 1,
-    draggable: true,
     initialSlide: 0,
-    speed: 200,
-    infinite: true,
-    rows: 1,
-    useCSS: true,
-    // dots: true, //setting slider
-    // autoplay: true,
-    // autoplaySpeed: 3000,
-    // pauseOnHover: true,
-    // prevArrow: (
-    //   <CustomPrevButton
-    //     onClick={function (): void {
-    //       throw new Error("Function not implemented.");
-    //     }}
-    //   />
-    // ),
-    // nextArrow: (
-    //   <CustomNextButton
-    //     onClick={function (): void {
-    //       throw new Error("Function not implemented.");
-    //     }}
-    //   />
-    // ),
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          dots: false,
+          adaptiveHeight: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          initialSlide: 0,
+          speed: 200,
+          prevArrow: (
+            <CustomPrevButton
+              onClick={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          ),
+          nextArrow: (
+            <CustomNextButton
+              onClick={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          ),
+        },
+      },
+    ],
   };
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 content shadow-2 border-1-dashed-AAAAAA bg-white">
+    <div
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 
+    content shadow-2 border-1-dashed-AAAAAA bg-white"
+    >
       <div>
         <FontAwesomeIcon
           icon={faDeleteLeft}
@@ -271,12 +322,12 @@ const SliderForm = ({
                 width={200}
                 className="content border-1-solid-b shadow-2"
               />
-              <h4 className="py-10">{item.content}</h4>
+              <h4 className="py-5">{item.content}</h4>
             </div>
           ))}
         </Slider>
       </div>
-      <div className="text-center py-5 ">
+      <div className="text-center pb-5 md:py-5">
         <button
           className="bg-oy text-white px-7 py-3 rounded-md"
           onClick={handleSubmit}

@@ -4,9 +4,12 @@ import Introduction from "../../Components/Introduction";
 import Upload from "../../Components/Upload";
 import SliderForm from "../../Components/SliderForm";
 import Guide from "../../Components/Guide";
-import Warning from "./../../Components/Warning";
+import Notification from "../../Components/Notification";
+import Loading from "../../Components/Loading";
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
   const [imageSrc, setImageSrc] = useState([""]);
   const [selected, setSelected] = useState(-1);
   const [showForm, setShowForm] = useState(false);
@@ -14,7 +17,7 @@ export default function Home() {
   const [lastClickTime, setLastClickTime] = useState(0);
   const minClickInterval = 4000;
   const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setShowForm(true);
+    setShowForm(true); //hiển thị form chọn các biểu mẫu như sơ yếu ,....
   };
 
   function convertToBase64() {
@@ -27,15 +30,19 @@ export default function Home() {
     };
   }
 
-  const handleExportExcel = async (e: React.MouseEvent) => {
+  const handleExportExcel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    //xuất excel
     if (imageSrc.length !== 2) {
+      //kiểm tra xem đã đủ 2 ảnh chưa
       const currentTime = Date.now();
       if (currentTime - lastClickTime >= minClickInterval) {
+        // set để warning hiển thị cách nhau mỗi 4 giây
         setWarning(true);
         setMessage("Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
+        setStatus("Warning");
         setTimeout(() => {
           setWarning(false);
-        }, 4000); // lát tao làm warning sau
+        }, 4000);
         setLastClickTime(currentTime);
       }
     }
@@ -82,7 +89,15 @@ export default function Home() {
   };
   return (
     <div className="content">
-      {warning ? <Warning setWarning={setWarning} message={message} /> : ""}
+      {warning ? (
+        <Notification
+          setWarning={setWarning}
+          message={message}
+          status={status}
+        />
+      ) : (
+        ""
+      )}
       {showForm ? (
         <SliderForm
           setMessage={setMessage}
@@ -93,18 +108,25 @@ export default function Home() {
           setShowForm={setShowForm}
           imageSrc={imageSrc}
           setImageSrc={setImageSrc}
+          setStatus={setStatus}
+          loading={loading}
+          setLoading={setLoading}
         />
       ) : (
         ""
       )}
       <div>
         <Introduction />
-        <Upload
-          imageSrc={imageSrc}
-          setImageSrc={setImageSrc}
-          handleDownload={handleDownload}
-          handleExportExcel={handleExportExcel}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <Upload
+            imageSrc={imageSrc}
+            setImageSrc={setImageSrc}
+            handleDownload={handleDownload}
+            handleExportExcel={handleExportExcel}
+          />
+        )}
       </div>
       <div className="flex flex-row-reverse  mt-2"></div>
       <Guide />

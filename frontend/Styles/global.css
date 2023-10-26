@@ -25,6 +25,9 @@ body.showForm .main {
 .content {
   @apply w-[80%] mx-auto;
 }
+.flexmd-center {
+  @apply md:flex md:items-center;
+}
 .flex-center {
   @apply flex items-center;
 }
