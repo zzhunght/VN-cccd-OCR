@@ -7,14 +7,17 @@ interface UploadProps {
   setImageSrc: (I: Array<string>) => void;
   handleDownload: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleExportExcel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  excelFile: string; // Thêm dòng này
+  setExcelFile: React.Dispatch<React.SetStateAction<string>>; // Thêm dòng này
 }
 const Upload = ({
   imageSrc,
   setImageSrc,
   handleDownload,
   handleExportExcel,
+  excelFile, // Use the excelFile from props
+  setExcelFile
 }: UploadProps) => {
-  const [excelFile, setExcelFile] = useState("");
   const handleUploadExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
     //lưu file excel vào biến excelFile
     if (e.target.files !== null) {
@@ -24,15 +27,15 @@ const Upload = ({
         reader.onload = (e) => {
           if (e.target === null) return;
           if (typeof e.target.result === "string") {
-            setExcelFile(e.target.result);
+            setExcelFile(e.target.result); // Use setExcelFile from props
             console.log(e.target.result);
           }
         };
         reader.readAsDataURL(file);
       }
     }
-    //có file excel rồi mày lấy kèm 2 cái ảnh rồi gọi API như bên kia nhé
   };
+
   const handleUploadImage = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -101,18 +104,9 @@ const Upload = ({
         ))}
       </div>
       <div className="mt-10 flex-2center  gap-5 text-white">
-        <button
-          onClick={handleExportExcel}
-          className="bg-g py-2 px-3 rounded-md"
-        >
-          Xuất excel
-        </button>
-        <button onClick={handleDownload} className="bg-oy py-2 px-3 rounded-md">
-          Tải về biểu mẫu thông tin
-        </button>
-        <div>
+      <div>
           <label className="bg-g py-2 px-3 rounded-md">
-            <span>Gửi file Excel</span>
+            <span>Chọn file Excel</span>
             <input
               type="file"
               className="hidden"
@@ -121,6 +115,16 @@ const Upload = ({
             ></input>
           </label>
         </div>
+        <button
+          onClick={handleExportExcel}
+          className="bg-g py-2 px-3 rounded-md"
+        >
+          Xuất excel
+        </button>
+        <button onClick={handleDownload} className="bg-oy py-2 px-3 rounded-md">
+          Chọn biểu mẫu thông tin
+        </button>
+
       </div>
     </div>
   );

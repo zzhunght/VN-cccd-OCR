@@ -108,15 +108,17 @@ const SliderForm = ({
     }
     const dataSelect = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
     //xử lí ở đây
-    console.log(dataSelect)
+    setShowForm(false);
+    setLoading(true); //tạo loading
+    console.log(dataSelect);
     const data = {
       chip_front: convertToBase64().chip_front64,
       chip_back: convertToBase64().chip_back64,
     };
-    console.log(data)
+    console.log(data);
 
-    if (dataSelect.selected==0){
-      console.log("So yeu li lich")
+    if (dataSelect.selected == 0) {
+      console.log("So yeu li lich");
       try {
         const response = await fetch("http://127.0.0.1:8000/word-soyeu", {
           method: "POST",
@@ -125,11 +127,11 @@ const SliderForm = ({
           },
           body: JSON.stringify(data),
         });
-  
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
+        setLoading(false); //tắt loading
         // const responseData = await response.json();
         // console.log('Success:', responseData);
         const blobData = await response.blob();
@@ -141,17 +143,21 @@ const SliderForm = ({
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-  
+
         URL.revokeObjectURL(url);
         console.log("File docx tải về thành công");
-
+        setStatus("Success"); //hiển thị thông báo thành công
+        setMessage("Thành công");
+        setSelected(-1);
+        setImageSrc([]);
+        setShowForm(false);
       } catch (error) {
         console.error("Error:", error);
       }
     }
-    
-    if (dataSelect.selected==1){
-      console.log("Tam tru tam vang")
+
+    if (dataSelect.selected == 1) {
+      console.log("Tam tru tam vang");
       try {
         const response = await fetch("http://127.0.0.1:8000/word-tamvang", {
           method: "POST",
@@ -160,11 +166,12 @@ const SliderForm = ({
           },
           body: JSON.stringify(data),
         });
-  
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
+        setLoading(false); //tắt loading
+
         // const responseData = await response.json();
         // console.log('Success:', responseData);
         const blobData = await response.blob();
@@ -176,17 +183,21 @@ const SliderForm = ({
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-  
+
         URL.revokeObjectURL(url);
         console.log("File docx tải về thành công");
-
+        setStatus("Success"); //hiển thị thông báo thành công
+        setMessage("Thành công");
+        setSelected(-1);
+        setImageSrc([]);
+        setShowForm(false);
       } catch (error) {
         console.error("Error:", error);
       }
     }
-    
-    if (dataSelect.selected==2){
-      console.log("dang ky tam tru")
+
+    if (dataSelect.selected == 2) {
+      console.log("dang ky tam tru");
       try {
         const response = await fetch("http://127.0.0.1:8000/word-tamtru", {
           method: "POST",
@@ -195,13 +206,11 @@ const SliderForm = ({
           },
           body: JSON.stringify(data),
         });
-  
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
-        // const responseData = await response.json();
-        // console.log('Success:', responseData);
+        setLoading(false); //tắt loading
         const blobData = await response.blob();
         const url = URL.createObjectURL(blobData);
         const a = document.createElement("a");
@@ -211,30 +220,21 @@ const SliderForm = ({
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-  
+
         URL.revokeObjectURL(url);
         console.log("File docx tải về thành công");
-
+        setStatus("Success"); //hiển thị thông báo thành công
+        setMessage("Thành công");
+        setSelected(-1);
+        setImageSrc([]);
+        setShowForm(false);
       } catch (error) {
         console.error("Error:", error);
       }
     }
-    //sau khi xong thì resets
-    // setSelected(-1);
-    // setImageSrc([]);
-    // setShowForm(false);
-    // const data = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
-    setLoading(true); //tạo loading
-    //xử lí gọi API ở đây
-    //sau khi xong thì resets
-    setLoading(false); //tắt loading
-    setWarning(true);
     setStatus("Success"); //hiển thị thông báo thành công
-    setMessage("Thành công");
-    setSelected(-1);
-    setImageSrc([]); //reset lại biểu mẫu và ảnh
-    setShowForm(false); //tắt slide
   };
+
   const CustomPrevButton = (
     { onClick }: CustomSlideButtonProps //custom lại 2 cái nút chuyển slide
   ) => (
