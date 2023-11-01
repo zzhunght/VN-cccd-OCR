@@ -147,6 +147,7 @@ const SliderForm = ({
         URL.revokeObjectURL(url);
         console.log("File docx tải về thành công");
         setStatus("Success"); //hiển thị thông báo thành công
+        setWarning(true)
         setMessage("Thành công");
         setSelected(-1);
         setImageSrc([]);
@@ -187,6 +188,7 @@ const SliderForm = ({
         URL.revokeObjectURL(url);
         console.log("File docx tải về thành công");
         setStatus("Success"); //hiển thị thông báo thành công
+        setWarning(true)
         setMessage("Thành công");
         setSelected(-1);
         setImageSrc([]);
@@ -224,6 +226,7 @@ const SliderForm = ({
         URL.revokeObjectURL(url);
         console.log("File docx tải về thành công");
         setStatus("Success"); //hiển thị thông báo thành công
+        setWarning(true)
         setMessage("Thành công");
         setSelected(-1);
         setImageSrc([]);
