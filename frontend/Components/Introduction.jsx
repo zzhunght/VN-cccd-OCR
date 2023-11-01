@@ -4,7 +4,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Advantage } from "../Contants";
 const Introduction = () => {
   return (
-    <div className="basis-1/3">
+    <div>
       <div>
         <h1 className="font-bold text-32 leading-32 my-10 text-center">
           <spa className="text-[#17CDEA]">2Fast - </spa>

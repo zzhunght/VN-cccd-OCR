@@ -7,13 +7,35 @@ interface UploadProps {
   setImageSrc: (I: Array<string>) => void;
   handleDownload: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleExportExcel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  excelFile: string; // Thêm dòng này
+  setExcelFile: React.Dispatch<React.SetStateAction<string>>; // Thêm dòng này
 }
 const Upload = ({
   imageSrc,
   setImageSrc,
   handleDownload,
   handleExportExcel,
+  excelFile, // Use the excelFile from props
+  setExcelFile
 }: UploadProps) => {
+  const handleUploadExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //lưu file excel vào biến excelFile
+    if (e.target.files !== null) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target === null) return;
+          if (typeof e.target.result === "string") {
+            setExcelFile(e.target.result); // Use setExcelFile from props
+            console.log(e.target.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
   const handleUploadImage = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -38,15 +60,15 @@ const Upload = ({
     }
   };
   return (
-    <div className="basis-2/3 rounded-md shadow-2 px-5 pt-5 pb-10">
+    <div className="rounded-md shadow-2 px-5 pt-5 pb-10">
       <h2 className="font-bold text-24 text-center px-5 py-3">
         Ảnh Căn cước công dân của bạn{" "}
       </h2>
-      <div className=" flex-center gap-2 border-1-dashed-AAAAAA px-5 py-4">
+      <div className=" flexmd-center md:gap-2 border-1-dashed-AAAAAA px-5 py-4">
         {ViewDirection.map((item: string, index: number) => (
-          <div className="basis-1/2 text-center " key={index}>
-            <h3 className="text-20 font-semibold my-5">{item}</h3>
-            <div className="mb-5 h-[320px]">
+          <div className="md:basis-1/2 text-center " key={index}>
+            <h3 className="text-20 font-semibold py-5">{item}</h3>
+            <div className=" md:h-[320px] h-[240px]">
               {imageSrc[index] ? ( // kiểm tra từng mặt cái nào đã tải thì hiện lên không thì hiện thẻ div bên dưới
                 <div className="h-full">
                   <Image
@@ -64,8 +86,8 @@ const Upload = ({
                 </div>
               )}
             </div>
-            <div className="my-8">
-              <label className="bg-oy text-white py-3 px-5 rounded-md mb-5 ">
+            <div className="py-8">
+              <label className="bg-oy text-white py-3 px-5 rounded-md">
                 <span>Chọn tệp hình ảnh</span>
                 <input
                   type="file"
@@ -82,6 +104,17 @@ const Upload = ({
         ))}
       </div>
       <div className="mt-10 flex-2center  gap-5 text-white">
+      <div>
+          <label className="bg-g py-2 px-3 rounded-md">
+            <span>Chọn file Excel</span>
+            <input
+              type="file"
+              className="hidden"
+              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              onChange={handleUploadExcel}
+            ></input>
+          </label>
+        </div>
         <button
           onClick={handleExportExcel}
           className="bg-g py-2 px-3 rounded-md"
@@ -89,8 +122,9 @@ const Upload = ({
           Xuất excel
         </button>
         <button onClick={handleDownload} className="bg-oy py-2 px-3 rounded-md">
-          Tải về biểu mẫu thông tin
+          Chọn biểu mẫu thông tin
         </button>
+
       </div>
     </div>
   );
