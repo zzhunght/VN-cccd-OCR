@@ -26,7 +26,8 @@ def TrichXuat_excel(json_front, json_back):
     df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=False)
 
 def add_row_self(json_front, json_back):
-    workbook = load_workbook(r'D:\learn\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
+    # workbook = load_workbook(r'D:\learn\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
+    workbook = load_workbook(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
     # Select the active sheet
     sheet = workbook.active
     # Chuyển chuỗi JSON thành đối tượng Python
@@ -65,7 +66,8 @@ def add_row_self(json_front, json_back):
             sheet[f'{col}{next_row}'] = value
 
     # Lưu lại tệp Excel
-    workbook.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+    # workbook.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+    workbook.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
 
 # done save_excel
 def save_excel(excel_data, file_path):
