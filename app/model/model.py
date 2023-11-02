@@ -14,7 +14,7 @@ config['device'] = 'cpu'
 class OCRProcessor:
     def __init__(self, img):
         self.reader = easyocr.Reader(['vi'], gpu=False)
-        self.model = YOLO("../assets/best-2.pt")
+        self.model = YOLO("assets/best-2.pt")
         self.names = self.model.names
         self.detector = Predictor(config)
         self.img = img
