@@ -63,8 +63,8 @@ def don_xin_dk_tam_tru(front_string, back_string):
                     para.text = para.text.replace('Tôi tên là: ....', 'Tôi tên là: ..' + data['name'])
                     para.text = para.text.replace('Ngày sinh:....', 'Ngày sinh:..' +
                                                 data['birth_day'] + '   ')
-                    para.text = para.text.replace('Địa chỉ thường trú......',
-                                                'Địa chỉ thường trú......' + data['recent_location'])
+                    para.text = para.text.replace('Địa chỉ thường trú:.......',
+                                                'Địa chỉ thường trú:....' + data['recent_location'])
                     # test expire_data == issued_data
                     para.text = para.text.replace('Ngày:..................................................',
                                                 'Ngày:...' + data['expire_date'])

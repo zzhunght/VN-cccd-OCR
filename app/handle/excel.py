@@ -90,8 +90,8 @@ def add_row_self(json_front, json_back):
             sheet[f'{col}{next_row}'] = value
 
     # Lưu lại tệp Excel
-    workbook.save('handle\dir_save\TrichXuatThongTinCoSan.xlsx')
-    # workbook.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+    # workbook.save('handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+    workbook.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
     # workbook.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
 
 # done save_excel
