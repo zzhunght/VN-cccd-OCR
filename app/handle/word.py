@@ -15,7 +15,7 @@ def check_exists(path):
 
 def so_yeu_ly_lich(front_string, back_string):
     # doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\so-yeu-ly-lich.docx')
-    doc = Document(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\so-yeu-ly-lich.docx')
+    doc = Document('handle/word_form/so-yeu-ly-lich.docx')
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Time New Roman'
@@ -23,8 +23,6 @@ def so_yeu_ly_lich(front_string, back_string):
     data = json.loads(front_string)
     dataB = json.loads(back_string)
     birth_day = data['birth_day'].split('/')
-    expire_date = data['expire_date'].split('/') # this is expride_date,
-    issue_date = dataB['issue_date'].split('/')
 
 
     for para in doc.paragraphs:
@@ -41,20 +39,17 @@ def so_yeu_ly_lich(front_string, back_string):
                 
                 para.text = para.text.replace('nơi cấp………', 'nơi cấp…....' + dataB['issue_place'])
                 para.text = para.text.replace('cấp ngày .…/…./……',
-                               'cấp ngày ' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
-                para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
+                               'cấp ngày ' + data['expire_date'])
+                para.text = para.text.replace('cấp ngày .…/…./……', 'cấp ngày '+ dataB['issue_date'])
     # doc.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\so-yeu-ly-lich.docx')
-    doc.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\so-yeu-ly-lich.docx')
+    doc.save(r'handle\dir_save\so-yeu-ly-lich.docx')
     print('saved')
 
 def don_xin_dk_tam_tru(front_string, back_string):
     # doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\don_xin_dk_tam_tru.docx')
-    doc = Document(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\don_xin_dk_tam_tru.docx')
+    doc = Document('handle/word_form/don_xin_dk_tam_tru.docx')
     data = json.loads(front_string)
     dataB = json.loads(back_string)
-    birth_day = data['birth_day'].split('/')
-    expire_date = data['expire_date'].split('/')  # this is expride_date,
-    issue_date = dataB['issue_date'].split('/')
 
 
     for para in doc.paragraphs:
@@ -63,31 +58,29 @@ def don_xin_dk_tam_tru(front_string, back_string):
                 para.text = para.text.replace('Số CCCD: ................................. ', 'Số CMND: ..' + data['id']+ '...')
                 para.text = para.text.replace('Tôi tên là: ....', 'Tôi tên là: ..' + data['name'])
                 para.text = para.text.replace('Ngày sinh:....', 'Ngày sinh:..' +
-                                              birth_day[0] + '/' + birth_day[1] + '/' + birth_day[2] + '   ')
+                                              data['birth_day'] + '   ')
                 para.text = para.text.replace('Địa chỉ thường trú......',
                                               'Địa chỉ thường trú......' + data['recent_location'])
                 # test expire_data == issued_data
                 para.text = para.text.replace('Ngày:..................................................',
-                                              'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' + expire_date[2])
+                                              'Ngày:...' + data['expire_date'])
                 para.text = para.text.replace('Cấp tại:.....', 'Cấp tại:...' + dataB['issue_place'])
-                para.text = para.text.replace('Ngày cấp:..................................................', 'Ngày cấp:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
-    # doc.save(f'app/handle/dir_save/don_xin_dk_tam_tru-{data["name"]}.docx')
+                para.text = para.text.replace('Ngày cấp:..................................................', 'Ngày cấp:...'+ dataB['issue_date'])
+    # doc.save(f'app/app\handle\dir_save\don_xin_dk_tam_tru-{data["name"]}.docx')
     # doc.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_dk_tam_tru.docx')
-    doc.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\don_xin_dk_tam_tru.docx')
+    doc.save('handle\dir_save\don_xin_dk_tam_tru.docx')
     print("saved")
 
 def don_xin_tam_vang(front_string, back_string):
     # doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\don_xin_tam_vang.docx')
-    doc = Document(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\don_xin_tam_vang.docx')
+    doc = Document('handle/word_form/don_xin_tam_vang.docx')
+    # D:\ekyc\app\handle\word_form\don_xin_tam_vang.docx
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Time New Roman'
     font.size = Pt(12)
     data = json.loads(front_string)
     dataB = json.loads(back_string)
-    birth_day = data['birth_day'].split('/')
-    expire_date = data['expire_date'].split('/')  # this is expride_date,
-    issue_date = dataB['issue_date'].split('/')
 
     for para in doc.paragraphs:
         for para in doc.paragraphs:
@@ -97,17 +90,16 @@ def don_xin_tam_vang(front_string, back_string):
                                                   'Số CCCD: ....' + data['id'])
                     para.text = para.text.replace('Tôi tên là: ....', 'Tôi tên là: ..' + data['name'])
                     para.text = para.text.replace('Ngày sinh:....', 'Ngày sinh:..' +
-                                                  birth_day[0] + '/' + birth_day[1] + '/' + birth_day[2] + '   ')
+                                                  data['birth_day'] + '   ')
                     para.text = para.text.replace('Địa chỉ thường trú:.....',
                                                   'Địa chỉ thường trú:...' + data['recent_location'])
                     # test expire_data == issued_data
                     para.text = para.text.replace('Ngày:.....',
-                                                  'Ngày:...' + expire_date[0] + '/' + expire_date[1] + '/' +
-                                                  expire_date[2])
+                                                  'Ngày:...' + data['expire_date'])
                     para.text = para.text.replace('Cấp tại:............................. ', 'Cấp tại:...'+ dataB['issue_place'] + "..")
-                    para.text = para.text.replace('Ngày:.....', 'Ngày:...'+ issue_date[0]+'/'+issue_date[1]+'/'+ issue_date[2])
+                    para.text = para.text.replace('Ngày:.....', 'Ngày:...'+ dataB['issue_date'])
     # doc.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_tam_vang.docx')
-    doc.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\don_xin_tam_vang.docx')
+    doc.save('handle\dir_save\don_xin_tam_vang.docx')
     print("save")
 
 
@@ -127,6 +119,6 @@ back = json.dumps({
 # ======Call Function=====
 # so_yeu_ly_lich(json_string2, back)  
 # don_xin_dk_tam_tru(json_string2, back)
-check_exists(r"C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\word_form\don_xin_tam_vang.docx")
+check_exists("handle\word_form\don_xin_tam_vang.docx")
 # don_xin_tam_vang(json_string2, back)
 

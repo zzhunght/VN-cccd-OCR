@@ -41,11 +41,9 @@ class OCRProcessor:
             join_text = ''
             for item in data[key]:
                 join_text = join_text + item[1] + ' '
-
             # print('key: ', key)
             # print('text: ', join_text)
             process_data[key] = join_text.rstrip()
-
         if process_data['type'] == 'Căn cược công dân mặt sau':
             # print('>>>>>>>>>>>>>>>>>>>>>>------------------------------>>>>>>>>>>>>>>')
             process_data['issue_place']= 'CỤC TRƯỞNG CỤC CẢNH SÁT QUẢN LÝ HÀNH CHÍNH VỀ TRẬT TỰ XÃ HỘI'
