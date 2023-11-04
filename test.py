@@ -14,7 +14,7 @@ img = cv2.imread(image_path)
 print(img.shape)
 reader = easyocr.Reader(['vi'], gpu= False)
 # Load a model
-model = YOLO("app/assets/best-2.pt") 
+model = YOLO("train_result/best.pt") 
 #  tên của nhãn
 names = model.names
 # print(names)

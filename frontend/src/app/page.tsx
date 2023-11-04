@@ -17,6 +17,14 @@ export default function Home() {
   const [warning, setWarning] = useState(false);
   const [lastClickTime, setLastClickTime] = useState(0);
   const minClickInterval = 4000;
+  const setNotification = (status: string, message: string) => {
+    setWarning(true);
+    setMessage(message);
+    setStatus(status);
+    setTimeout(() => {
+      setWarning(false);
+    }, 4000);
+  };
   const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setShowForm(true); //hiển thị form chọn các biểu mẫu như sơ yếu ,....
   };
@@ -38,105 +46,98 @@ export default function Home() {
       const currentTime = Date.now();
       if (currentTime - lastClickTime >= minClickInterval) {
         // set để warning hiển thị cách nhau mỗi 4 giây
-        setWarning(true);
-        setMessage("Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
-        setStatus("Warning");
-        setTimeout(() => {
-          setWarning(false);
-        }, 4000);
+        setNotification("Warning", "Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
         setLastClickTime(currentTime);
       }
-    }
-    setLoading(true); //tạo loading
-
-    if (excelFile) {
-      // neu co file excel co san thi lam nhu the nay
-      console.log("YES================================================");
-      const data = {
-        chip_front: convertToBase64().chip_front64,
-        chip_back: convertToBase64().chip_back64,
-        excel_file : excelFile.toString()
-      };
-      console.log(data);
-      console.log(excelFile);
-      console.log(excelFile.toString());
-      try {
-        const response = await fetch("http://127.0.0.1:8000/excel-existing", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        setLoading(false); //tắt loading
-        const blobData = await response.blob();
-        const url = URL.createObjectURL(blobData);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = "TrichXuatThongTinCoSan.xlsx";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-  
-        URL.revokeObjectURL(url);
-        console.log("File tải về thành công");
-        setStatus("Success"); //hiển thị thông báo thành công
-        setWarning(true)
-        setMessage("Thành công");
-        setSelected(-1);
-        setImageSrc([]);
-        setShowForm(false);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    //=ágdhjkasgdhjasgdjhasgdhjasgdh  gáhjdgashjdgasjhd =================================================================
     } else {
-      //================================================================
-      console.log("No================================================================");
-      const data = {
-        chip_front: convertToBase64().chip_front64,
-        chip_back: convertToBase64().chip_back64,
-      };
+      setLoading(true); //tạo loading
+      if (excelFile) {
+        // neu co file excel co san thi lam nhu the nay
+        console.log("YES================================================");
+        const data = {
+          chip_front: convertToBase64().chip_front64,
+          chip_back: convertToBase64().chip_back64,
+          excel_file: excelFile.toString(),
+        };
+        console.log(data);
+        console.log(excelFile);
+        console.log(excelFile.toString());
+        try {
+          const response = await fetch("http://127.0.0.1:8000/excel-existing", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            const blobData = await response.blob();
+            const url = URL.createObjectURL(blobData);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "TrichXuatThongTinCoSan.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
 
-      try {
-        const response = await fetch("http://127.0.0.1:8000/excel-one", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+            URL.revokeObjectURL(url);
+            console.log("File tải về thành công");
+            setNotification("Success", "Thành công");
+            setImageSrc([]);
+            setLoading(false); //tắt loading
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setLoading(false);
         }
-        setLoading(false); //tắt loading
-        const blobData = await response.blob();
-        const url = URL.createObjectURL(blobData);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = "TrichXuatThongTin.xlsx";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        //=ágdhjkasgdhjasgdjhasgdhjasgdh  gáhjdgashjdgasjhd =================================================================
+      } else {
+        //================================================================
+        console.log(
+          "No================================================================"
+        );
+        const data = {
+          chip_front: convertToBase64().chip_front64,
+          chip_back: convertToBase64().chip_back64,
+        };
 
-        URL.revokeObjectURL(url);
-        console.log("File tải về thành công");
-        setStatus("Success"); //hiển thị thông báo thành công
-        setWarning(true)
-        setMessage("Thành công");
-        setSelected(-1);
-        setImageSrc([]);
-        setShowForm(false);
-      } catch (error) {
-        console.error("Error:", error);
+        try {
+          const response = await fetch("http://127.0.0.1:8000/excel-one", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            const blobData = await response.blob();
+            const url = URL.createObjectURL(blobData);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "TrichXuatThongTin.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            console.log("File tải về thành công");
+            setNotification("Success", "Thành công");
+            setImageSrc([]);
+            setLoading(false); //tắt loading
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setLoading(false);
+        }
+        //============================================================================ no
       }
-      //============================================================================ no
     }
   };
   return (

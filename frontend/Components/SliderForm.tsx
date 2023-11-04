@@ -48,6 +48,14 @@ const SliderForm = ({
   // const [changeSetting, setChangeSetting] = useState({});
   const [lastClickTime, setLastClickTime] = useState(0);
   const minClickInterval = 4000;
+  const setNotification = (status: string, message: string) => {
+    setWarning(true);
+    setMessage(message);
+    setStatus(status);
+    setTimeout(() => {
+      setWarning(false);
+    }, 4000);
+  };
   // useEffect(() => {
   //   const handleResize = () => {
   //     console.log(window.innerWidth);
@@ -92,150 +100,143 @@ const SliderForm = ({
       const currentTime = Date.now();
       if (currentTime - lastClickTime >= minClickInterval) {
         //set 4 giây cách nhau giữa 2 thông báo
-        setWarning(true);
         if (selected === -1) {
-          setMessage("Bạn chưa chọn loại biểu mẫu");
-          setStatus("Warning");
+          setNotification("Warning", "Bạn chưa chọn loại biểu mẫu");
         } else {
-          setMessage("Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi");
-          setStatus("Warning");
+          setNotification(
+            "Warning",
+            "Bạn chưa cung cấp đủ 2 ảnh cho chúng tôi"
+          );
         }
-        setTimeout(() => {
-          setWarning(false);
-        }, 4000); //tắt đi thông báo
         setLastClickTime(currentTime);
       }
-    }
-    const dataSelect = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
-    //xử lí ở đây
-    setShowForm(false);
-    setLoading(true); //tạo loading
-    console.log(dataSelect);
-    const data = {
-      chip_front: convertToBase64().chip_front64,
-      chip_back: convertToBase64().chip_back64,
-    };
-    console.log(data);
+    } else {
+      const dataSelect = { selected, imageSrc }; //selected là chỉ mục của form còn imageSrc là 2 ảnh
+      //xử lí ở đây
+      setShowForm(false);
+      setLoading(true); //tạo loading
+      console.log(dataSelect);
+      const data = {
+        chip_front: convertToBase64().chip_front64,
+        chip_back: convertToBase64().chip_back64,
+      };
+      console.log(data);
+      if (dataSelect.selected == 0) {
+        console.log("So yeu li lich");
+        try {
+          const response = await fetch("http://127.0.0.1:8000/word-soyeu", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
 
-    if (dataSelect.selected == 0) {
-      console.log("So yeu li lich");
-      try {
-        const response = await fetch("http://127.0.0.1:8000/word-soyeu", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            const blobData = await response.blob();
+            const url = URL.createObjectURL(blobData);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "SoYeuLiLich.docx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+            URL.revokeObjectURL(url);
+            console.log("File docx tải về thành công");
+            setNotification("Success", "Thành công");
+            setSelected(-1);
+            setImageSrc([]);
+            setLoading(false); //tắt loading
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setLoading(false);
         }
-        setLoading(false); //tắt loading
-        // const responseData = await response.json();
-        // console.log('Success:', responseData);
-        const blobData = await response.blob();
-        const url = URL.createObjectURL(blobData);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = "SoYeuLiLich.docx";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+      }
 
-        URL.revokeObjectURL(url);
-        console.log("File docx tải về thành công");
-        setStatus("Success"); //hiển thị thông báo thành công
-        setWarning(true)
-        setMessage("Thành công");
-        setSelected(-1);
-        setImageSrc([]);
-        setShowForm(false);
-      } catch (error) {
-        console.error("Error:", error);
+      if (dataSelect.selected == 1) {
+        console.log("Tam tru tam vang");
+        try {
+          const response = await fetch("http://127.0.0.1:8000/word-tamvang", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            // const responseData = await response.json();
+            // console.log('Success:', responseData);
+            const blobData = await response.blob();
+            const url = URL.createObjectURL(blobData);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "DonXinTamVang.docx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
+            console.log("File docx tải về thành công");
+            setNotification("Success", "Thành công");
+            setSelected(-1);
+            setImageSrc([]);
+            setLoading(false); //tắt loading
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setLoading(false);
+        }
+      }
+
+      if (dataSelect.selected == 2) {
+        console.log("dang ky tam tru");
+        try {
+          const response = await fetch("http://127.0.0.1:8000/word-tamtru", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            const blobData = await response.blob();
+            const url = URL.createObjectURL(blobData);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "DonDangKiTamTru.docx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
+            console.log("File docx tải về thành công");
+            setNotification("Success", "Thành công");
+            setSelected(-1);
+            setImageSrc([]);
+            setLoading(false); //tắt loading
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setLoading(false);
+        }
       }
     }
-
-    if (dataSelect.selected == 1) {
-      console.log("Tam tru tam vang");
-      try {
-        const response = await fetch("http://127.0.0.1:8000/word-tamvang", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        setLoading(false); //tắt loading
-
-        // const responseData = await response.json();
-        // console.log('Success:', responseData);
-        const blobData = await response.blob();
-        const url = URL.createObjectURL(blobData);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = "DonXinTamVang.docx";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        URL.revokeObjectURL(url);
-        console.log("File docx tải về thành công");
-        setStatus("Success"); //hiển thị thông báo thành công
-        setWarning(true)
-        setMessage("Thành công");
-        setSelected(-1);
-        setImageSrc([]);
-        setShowForm(false);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-
-    if (dataSelect.selected == 2) {
-      console.log("dang ky tam tru");
-      try {
-        const response = await fetch("http://127.0.0.1:8000/word-tamtru", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        setLoading(false); //tắt loading
-        const blobData = await response.blob();
-        const url = URL.createObjectURL(blobData);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = "DonDangKiTamTru.docx";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        URL.revokeObjectURL(url);
-        console.log("File docx tải về thành công");
-        setStatus("Success"); //hiển thị thông báo thành công
-        setWarning(true)
-        setMessage("Thành công");
-        setSelected(-1);
-        setImageSrc([]);
-        setShowForm(false);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-    setStatus("Success"); //hiển thị thông báo thành công
   };
 
   const CustomPrevButton = (
