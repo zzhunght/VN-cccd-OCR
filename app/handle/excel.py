@@ -46,7 +46,7 @@ def TrichXuat_excel(json_front, json_back):
 
     # Lưu vào file Excel với index=True
     # df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=True, header=True) 
-    df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=False, header=True)
+    df.to_excel(r'handle/dir_save/TrichXuatThongTin.xlsx', index=False, header=True)
 
 
 def add_row_self(json_front, json_back):
