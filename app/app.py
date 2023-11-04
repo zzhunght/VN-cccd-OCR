@@ -144,7 +144,7 @@ def predict(body: PredictInputExcel):
     excel_data = body.excel_file
 
     # output_path = r'D:\learn\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx'
-    output_path = 'handle/temp_folder/TrichXuatThongTinCoSan.xlsx'
+    output_path = 'handle\\temp_folder\TrichXuatThongTinCoSan.xlsx'
     # output_path = r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx'
     save_excel(excel_data, output_path)
     
@@ -155,5 +155,5 @@ def predict(body: PredictInputExcel):
     add_row_self(json.dumps(result_front), json.dumps(result_back))
     # file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx'
     # file_path = r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx'
-    file_path = 'handle/dir_save/TrichXuatThongTinCoSan.xlsx'
+    file_path = 'handle\dir_save\TrichXuatThongTinCoSan.xlsx'
     return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
