@@ -56,12 +56,14 @@ class OCRProcessor:
         for r in results:
             boxs = r.boxes
             classes = boxs.cls
+            print('class: ', classes)
             data = {
 
             }
             for idx, box in enumerate(boxs.xyxy):
                 x1,y1,x2,y2 = box.tolist()
                 name = self.names[int(classes[idx])]
+                print(name, 'index:  ', int(classes[idx] ))
                 if(name == 'chip_front' or name == '12so_font'):
                     data['type'] = 'Căn cược công dân mặt trước'
                     continue

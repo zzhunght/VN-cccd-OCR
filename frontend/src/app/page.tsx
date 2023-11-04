@@ -71,7 +71,8 @@ export default function Home() {
             body: JSON.stringify(data),
           });
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            const error = await response.json()
+            throw new Error(error?.detail);
           } else {
             const blobData = await response.blob();
             const url = URL.createObjectURL(blobData);
@@ -89,9 +90,9 @@ export default function Home() {
             setImageSrc([]);
             setLoading(false); //tắt loading
           }
-        } catch (error) {
-          console.error("Error:", error);
-          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+        } catch (error: any) {
+          console.log("Error:", error);
+          setNotification("Error", error.message);
           setLoading(false);
         }
         //=ágdhjkasgdhjasgdjhasgdhjasgdh  gáhjdgashjdgasjhd =================================================================
@@ -114,7 +115,8 @@ export default function Home() {
             body: JSON.stringify(data),
           });
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            const error = await response.json()
+            throw new Error(error?.detail);
           } else {
             const blobData = await response.blob();
             const url = URL.createObjectURL(blobData);
@@ -131,9 +133,9 @@ export default function Home() {
             setImageSrc([]);
             setLoading(false); //tắt loading
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error:", error);
-          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setNotification("Error", error.message);
           setLoading(false);
         }
         //============================================================================ no

@@ -9,12 +9,12 @@ config = Cfg.load_config_from_name('vgg_transformer')
 config['cnn']['pretrained']=False
 config['device'] = 'cpu'
 detector = Predictor(config)
-image_path = 'data/annotations_v2/2.jpg'
+image_path = 'data/annotations_v2/10.jpg'
 img = cv2.imread(image_path)
 print(img.shape)
 reader = easyocr.Reader(['vi'], gpu= False)
 # Load a model
-model = YOLO("train_result/best.pt") 
+model = YOLO("train_result/best-2.pt") 
 #  tên của nhãn
 names = model.names
 # print(names)

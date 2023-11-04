@@ -133,7 +133,8 @@ const SliderForm = ({
           });
 
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            const error = await response.json()
+            throw new Error(error?.detail);
           } else {
             const blobData = await response.blob();
             const url = URL.createObjectURL(blobData);
@@ -152,9 +153,8 @@ const SliderForm = ({
             setImageSrc([]);
             setLoading(false); //tắt loading
           }
-        } catch (error) {
-          console.error("Error:", error);
-          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+        } catch (error: any) {
+          setNotification("Error", error.message);
           setLoading(false);
         }
       }
@@ -171,7 +171,8 @@ const SliderForm = ({
           });
 
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            const error = await response.json()
+            throw new Error(error?.detail);
           } else {
             // const responseData = await response.json();
             // console.log('Success:', responseData);
@@ -192,9 +193,8 @@ const SliderForm = ({
             setImageSrc([]);
             setLoading(false); //tắt loading
           }
-        } catch (error) {
-          console.error("Error:", error);
-          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+        } catch (error: any) {
+          setNotification("Error", error?.message);
           setLoading(false);
         }
       }
@@ -211,7 +211,8 @@ const SliderForm = ({
           });
 
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            const error = await response.json()
+            throw new Error(error?.detail);
           } else {
             const blobData = await response.blob();
             const url = URL.createObjectURL(blobData);
@@ -230,9 +231,9 @@ const SliderForm = ({
             setImageSrc([]);
             setLoading(false); //tắt loading
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error:", error);
-          setNotification("Error", "Có lỗi, vui lòng thử lại sau");
+          setNotification("Error", error?.message);
           setLoading(false);
         }
       }
