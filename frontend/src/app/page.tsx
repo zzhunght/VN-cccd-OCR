@@ -6,7 +6,10 @@ import SliderForm from "../../Components/SliderForm";
 import Guide from "../../Components/Guide";
 import Notification from "../../Components/Notification";
 import Loading from "../../Components/Loading";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { Modal } from "antd";
 export default function Home() {
+  const [excelFileName, setExcelFileName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
@@ -17,6 +20,7 @@ export default function Home() {
   const [warning, setWarning] = useState(false);
   const [lastClickTime, setLastClickTime] = useState(0);
   const minClickInterval = 4000;
+  const { confirm } = Modal;
   const setNotification = (status: string, message: string) => {
     setWarning(true);
     setMessage(message);
@@ -25,6 +29,28 @@ export default function Home() {
       setWarning(false);
     }, 4000);
   };
+  function showConfirm(blobData: any, fileName: string) {
+    confirm({
+      title: "Bạn có muốn tiếp tục trích xuất và thêm vào tệp này?",
+      icon: <ExclamationCircleFilled />,
+      content:
+        "Bạn có thể trích xuất thêm thông tin từ các ảnh khác và thêm vào tệp",
+      async onOk() {
+        setExcelFileName(fileName);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target === null) return;
+          if (typeof e.target.result === "string") {
+            // Lưu nội dung tệp Excel vào biến excelFile
+            setExcelFile(e.target.result);
+            console.log(excelFile);
+          }
+        };
+        reader.readAsDataURL(blobData);
+      },
+      onCancel() {},
+    });
+  }
   const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setShowForm(true); //hiển thị form chọn các biểu mẫu như sơ yếu ,....
   };
@@ -71,19 +97,31 @@ export default function Home() {
             body: JSON.stringify(data),
           });
           if (!response.ok) {
-            const error = await response.json()
+            const error = await response.json();
             throw new Error(error?.detail);
           } else {
             const blobData = await response.blob();
             const url = URL.createObjectURL(blobData);
+            const timestamp = new Date().getTime();
+            const fileName = `TrichXuatThongTinCoSan_${timestamp}.xlsx`;
+            setExcelFileName(fileName);
             const a = document.createElement("a");
             a.style.display = "none";
             a.href = url;
-            a.download = "TrichXuatThongTinCoSan.xlsx";
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              if (e.target === null) return;
+              if (typeof e.target.result === "string") {
+                // Lưu nội dung tệp Excel vào biến excelFile
+                setExcelFile(e.target.result);
+                console.log(excelFile);
+              }
+            };
+            reader.readAsDataURL(blobData);
             document.body.removeChild(a);
-
             URL.revokeObjectURL(url);
             console.log("File tải về thành công");
             setNotification("Success", "Thành công");
@@ -115,17 +153,21 @@ export default function Home() {
             body: JSON.stringify(data),
           });
           if (!response.ok) {
-            const error = await response.json()
+            const error = await response.json();
             throw new Error(error?.detail);
           } else {
             const blobData = await response.blob();
+            console.log(blobData);
             const url = URL.createObjectURL(blobData);
+            const timestamp = new Date().getTime();
+            const fileName = `TrichXuatThongTin_${timestamp}.xlsx`;
             const a = document.createElement("a");
             a.style.display = "none";
             a.href = url;
-            a.download = "TrichXuatThongTin.xlsx";
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
+            showConfirm(blobData, fileName);
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             console.log("File tải về thành công");
@@ -176,6 +218,8 @@ export default function Home() {
           <Loading />
         ) : (
           <Upload
+            excelFileName={excelFileName}
+            setExcelFileName={setExcelFileName}
             imageSrc={imageSrc}
             setImageSrc={setImageSrc}
             handleDownload={handleDownload}
