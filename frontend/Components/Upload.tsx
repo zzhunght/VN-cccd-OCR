@@ -2,33 +2,40 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { ViewDirection } from "../Contants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 interface UploadProps {
   imageSrc: Array<string>;
   setImageSrc: (I: Array<string>) => void;
   handleDownload: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleExportExcel: (e: React.MouseEvent<HTMLButtonElement>) => void;
   excelFile: string; // Thêm dòng này
-  setExcelFile: React.Dispatch<React.SetStateAction<string>>; // Thêm dòng này
+  setExcelFile: React.Dispatch<React.SetStateAction<string>>;
+  setExcelFileName: React.Dispatch<React.SetStateAction<string>>;
+  excelFileName: string;
 }
 const Upload = ({
+  excelFileName,
+  setExcelFileName,
   imageSrc,
   setImageSrc,
   handleDownload,
   handleExportExcel,
   excelFile, // Use the excelFile from props
-  setExcelFile
+  setExcelFile,
 }: UploadProps) => {
   const handleUploadExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
     //lưu file excel vào biến excelFile
     if (e.target.files !== null) {
       const file = e.target.files[0];
+      setExcelFileName(file.name);
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target === null) return;
           if (typeof e.target.result === "string") {
             setExcelFile(e.target.result); // Use setExcelFile from props
-            console.log(e.target.result);
+            console.log(excelFile);
           }
         };
         reader.readAsDataURL(file);
@@ -104,14 +111,17 @@ const Upload = ({
         ))}
       </div>
       <div className="mt-10 flex-2center  gap-5 text-white">
-      <div>
-          <label className="bg-g py-2 px-3 rounded-md">
+        <div>
+          <label className="bg-g py-2 px-3 rounded-md block text-center">
             <span>Chọn file Excel</span>
             <input
               type="file"
               className="hidden"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               onChange={handleUploadExcel}
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                (e.target as HTMLInputElement).value = "";
+              }}
             ></input>
           </label>
         </div>
@@ -124,8 +134,37 @@ const Upload = ({
         <button onClick={handleDownload} className="bg-oy py-2 px-3 rounded-md">
           Chọn biểu mẫu thông tin
         </button>
-
       </div>
+      {excelFile ? (
+        <div className="md:w-[50%] mx-auto text-center ">
+          <h2 className="text-24 font-medium pt-5 pb-3">
+            File excel dùng để trích xuất :
+          </h2>
+          <div className="w-[80%] mx-auto">
+            <div className="flex-2center gap-2 border-1-dashed-AAAAAA py-5">
+              <Image
+                src={"/icon/tải xuống (1).png"}
+                alt="excel"
+                width={80}
+                height={80}
+              />
+              <p className="text-16 overflow-hidden text-ellipsis">
+                {excelFileName}
+              </p>
+              <FontAwesomeIcon
+                icon={faXmark}
+                className="px-4 text-24 text-[rgba(0,0,0,0.3)] cursor-pointer"
+                onClick={(e) => {
+                  setExcelFile("");
+                  setExcelFileName("");
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

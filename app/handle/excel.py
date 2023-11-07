@@ -50,9 +50,8 @@ def TrichXuat_excel(json_front, json_back):
 
 
 def add_row_self(json_front, json_back):
-    workbook = load_workbook('handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
     # workbook = load_workbook(r'D:\learn\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
-    # workbook = load_workbook(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
+    workbook = load_workbook(r'handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
     # Select the active sheet
     sheet = workbook.active
     # Chuyển chuỗi JSON thành đối tượng Python
