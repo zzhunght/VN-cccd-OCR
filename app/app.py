@@ -11,7 +11,7 @@ import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, File, HTTPException, Response, UploadFile
 app = FastAPI()
-from model.model import OCRProcessor
+from model.model import processor
 from handle.word import don_xin_tam_vang, don_xin_dk_tam_tru, so_yeu_ly_lich
 from handle.excel import TrichXuat_excel, add_row_self, save_excel
 from schema.schema import PredictInput, PredictInputExcel
@@ -25,6 +25,7 @@ origins = [
     "http://localhost:8080",
     "http://localhost:3000",
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -48,11 +49,9 @@ def predict(body: PredictInput):
 
     chip_back_img = img_process_b64_to_rgb(body.chip_back)
     chip_front_img = img_process_b64_to_rgb(body.chip_front)
-    
-    processor1 = OCRProcessor(chip_front_img)
-    processor2 = OCRProcessor(chip_back_img)
-    result_front = processor1.predict()  
-    result_back = processor2.predict()  
+
+    result_front = processor.predict(chip_front_img)  
+    result_back = processor.predict(chip_back_img)  
     return {"result": {
         "font":result_front,
         "back": result_back
@@ -69,10 +68,8 @@ def predict(body: PredictInput):
     chip_back_img = img_process_b64_to_rgb(body.chip_back)
     chip_front_img = img_process_b64_to_rgb(body.chip_front)
 
-    processor1 = OCRProcessor(chip_front_img)
-    processor2 = OCRProcessor(chip_back_img)
-    result_front = processor1.predict()
-    result_back = processor2.predict()
+    result_front = processor.predict(chip_front_img)
+    result_back = processor.predict(chip_back_img)
     so_yeu_ly_lich(json.dumps(result_front), json.dumps(result_back))
     # file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\so-yeu-ly-lich.docx'
     file_path = 'handle/dir_save/so-yeu-ly-lich.docx'
@@ -86,10 +83,8 @@ def predict(body: PredictInput):
     chip_back_img = img_process_b64_to_rgb(body.chip_back)
     chip_front_img = img_process_b64_to_rgb(body.chip_front)
 
-    processor1 = OCRProcessor(chip_front_img)
-    processor2 = OCRProcessor(chip_back_img)
-    result_front = processor1.predict()
-    result_back = processor2.predict()
+    result_front = processor.predict(chip_front_img)
+    result_back = processor.predict(chip_back_img)
     don_xin_tam_vang(json.dumps(result_front), json.dumps(result_back))
     # file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_tam_vang.docx'
     file_path = 'handle\dir_save\don_xin_tam_vang.docx'
@@ -103,11 +98,8 @@ def predict(body: PredictInput):
 
     chip_back_img = img_process_b64_to_rgb(body.chip_back)
     chip_front_img = img_process_b64_to_rgb(body.chip_front)
-
-    processor1 = OCRProcessor(chip_front_img)
-    processor2 = OCRProcessor(chip_back_img)
-    result_front = processor1.predict()
-    result_back = processor2.predict()
+    result_front = processor.predict(chip_front_img)
+    result_back = processor.predict(chip_back_img)
     don_xin_dk_tam_tru(json.dumps(result_front), json.dumps(result_back))
     # file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\don_xin_dk_tam_tru.docx'
     # file_path = r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\app\handle\dir_save\don_xin_dk_tam_tru.docx'
@@ -121,11 +113,8 @@ def predict(body: PredictInput):
 
     chip_back_img = img_process_b64_to_rgb(body.chip_back)
     chip_front_img = img_process_b64_to_rgb(body.chip_front)
-
-    processor1 = OCRProcessor(chip_front_img)
-    processor2 = OCRProcessor(chip_back_img)
-    result_front = processor1.predict()
-    result_back = processor2.predict()
+    result_front = processor.predict(chip_front_img)
+    result_back = processor.predict(chip_back_img)
     TrichXuat_excel(json.dumps(result_front), json.dumps(result_back))
     # file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTin.xlsx'
     # file_path = r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\app\handle\dir_save\TrichXuatThongTin.xlsx'
@@ -148,10 +137,9 @@ def predict(body: PredictInputExcel):
     # output_path = r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx'
     save_excel(excel_data, output_path)
     
-    processor1 = OCRProcessor(chip_front_img)
-    processor2 = OCRProcessor(chip_back_img)
-    result_front = processor1.predict()
-    result_back = processor2.predict() 
+
+    result_front = processor.predict(chip_front_img)
+    result_back = processor.predict(chip_back_img) 
     add_row_self(json.dumps(result_front), json.dumps(result_back))
     # file_path = r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx'
     file_path = r'handle\dir_save\TrichXuatThongTinCoSan.xlsx'

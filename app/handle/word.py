@@ -46,7 +46,7 @@ def so_yeu_ly_lich(front_string, back_string):
         doc.save(r'handle\dir_save\so-yeu-ly-lich.docx')
         print('saved')
     except Exception as e:
-        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công')
+        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công, Vui lòng chọn ảnh khác')
 
 def don_xin_dk_tam_tru(front_string, back_string):
     # doc = Document(r'D:\learn\VN-cccd-OCR\app\handle\word_form\don_xin_dk_tam_tru.docx')
@@ -75,7 +75,7 @@ def don_xin_dk_tam_tru(front_string, back_string):
         doc.save('handle\dir_save\don_xin_dk_tam_tru.docx')
         print("saved")
     except Exception as e:
-        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công')
+        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công, Vui lòng chọn ảnh khác')
 
 def don_xin_tam_vang(front_string, back_string):
     try:
@@ -88,7 +88,7 @@ def don_xin_tam_vang(front_string, back_string):
         font.size = Pt(12)
         data = json.loads(front_string)
         dataB = json.loads(back_string)
-
+        print('data:', data)
         for para in doc.paragraphs:
             for para in doc.paragraphs:
                 for run in para.runs:
@@ -109,7 +109,8 @@ def don_xin_tam_vang(front_string, back_string):
         doc.save('handle\dir_save\don_xin_tam_vang.docx')
         print("save")
     except Exception as e:
-        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công')
+        print('error :::', e)
+        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công, Vui lòng chọn ảnh khác')
 
 
 json_string2 = json.dumps({'type': 'Căn cược công dân mặt trước',

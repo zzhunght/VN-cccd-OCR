@@ -19,7 +19,7 @@ model = YOLO("train_result/best-2.pt")
 names = model.names
 # print(names)
 def remove_noise (img):
-    timestamp = int(time.time())
+    timestamp = int(time.time()) 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # blur
     blur = cv2.GaussianBlur(gray, (0,0), sigmaX=33, sigmaY=33)

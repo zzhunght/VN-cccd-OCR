@@ -3,6 +3,7 @@ import json
 from openpyxl import load_workbook
 import pandas as pd
 import os
+from fastapi import HTTPException
 
 def check_exist(path):
     exists = os.path.exists(path)
@@ -26,73 +27,79 @@ def check_exist(path):
 #     df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=False)
 
 def TrichXuat_excel(json_front, json_back):
-    data_front = json.loads(json_front)
-    data_back = json.loads(json_back)
-    
-    if 'type' in data_front:
-        del data_front['type']
-    if 'type' in data_back:
-        del data_back['type']
+    try:
+        data_front = json.loads(json_front)
+        data_back = json.loads(json_back)
+        
+        if 'type' in data_front:
+            del data_front['type']
+        if 'type' in data_back:
+            del data_back['type']
 
-    combined_data = {**data_front, **data_back}
+        combined_data = {**data_front, **data_back}
 
-    # Tạo DataFrame từ combined_data
-    df = pd.DataFrame([combined_data])
+        # Tạo DataFrame từ combined_data
+        df = pd.DataFrame([combined_data])
 
-    # Sắp xếp lại các cột theo thứ tự mong muốn
-    df = df[['name', 'id', 'expire_date', 'birth_day', 
-             'gender', 'nationality', 'recent_location', 'origin_location', 
-             'issue_place', 'issue_date']]
+        # Sắp xếp lại các cột theo thứ tự mong muốn
+        df = df[['name', 'id', 'expire_date', 'birth_day', 
+                'gender', 'nationality', 'recent_location', 'origin_location', 
+                'issue_place', 'issue_date']]
 
-    # Lưu vào file Excel với index=True
-    # df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=True, header=True) 
-    df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=False, header=True)
+        # Lưu vào file Excel với index=True
+        # df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=True, header=True) 
+        df.to_excel('handle/dir_save/TrichXuatThongTin.xlsx', index=False, header=True)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công, Vui lòng chọn ảnh khác')
 
 
 def add_row_self(json_front, json_back):
     # workbook = load_workbook(r'D:\learn\VN-cccd-OCR\app\handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
-    workbook = load_workbook(r'handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
-    # Select the active sheet
-    sheet = workbook.active
-    # Chuyển chuỗi JSON thành đối tượng Python
-    data_front = json.loads(json_front)
-    data_back = json.loads(json_back)
-    
-    if 'type' in data_front:
-        del data_front['type']
-    if 'type' in data_back:
-        del data_back['type']
+    try:
+        workbook = load_workbook(r'handle\temp_folder\TrichXuatThongTinCoSan.xlsx')
+        # Select the active sheet
+        sheet = workbook.active
+        # Chuyển chuỗi JSON thành đối tượng Python
+        data_front = json.loads(json_front)
+        data_back = json.loads(json_back)
+        
+        if 'type' in data_front:
+            del data_front['type']
+        if 'type' in data_back:
+            del data_back['type']
 
-    combined_data = {**data_front, **data_back}
-    # Tìm hàng trống đầu tiên trong cột 'A'
-    next_row = 1
-    while sheet[f'A{next_row}'].value is not None:
-        next_row += 1
+        combined_data = {**data_front, **data_back}
+        # Tìm hàng trống đầu tiên trong cột 'A'
+        next_row = 1
+        while sheet[f'A{next_row}'].value is not None:
+            next_row += 1
 
-    # Tạo một từ điển ánh xạ các trường JSON với cột tương ứng
-    column_mapping = {
-        'name': 'A',
-        'id': 'B',
-        'expire_date': 'C',
-        'birth_day': 'D',
-        'gender': 'E',
-        'nationality': 'F',
-        'recent_location': 'G',
-        'origin_location': 'H',
-        'issue_place': 'I',
-        'issue_date': 'J'
-    }
+        # Tạo một từ điển ánh xạ các trường JSON với cột tương ứng
+        column_mapping = {
+            'name': 'A',
+            'id': 'B',
+            'expire_date': 'C',
+            'birth_day': 'D',
+            'gender': 'E',
+            'nationality': 'F',
+            'recent_location': 'G',
+            'origin_location': 'H',
+            'issue_place': 'I',
+            'issue_date': 'J'
+        }
 
-    # Duyệt qua dữ liệu và điền vào các cột tương ứng
-    for key, value in combined_data.items():
-        if key in column_mapping:
-            col = column_mapping[key]
-            sheet[f'{col}{next_row}'] = value
+        # Duyệt qua dữ liệu và điền vào các cột tương ứng
+        for key, value in combined_data.items():
+            if key in column_mapping:
+                col = column_mapping[key]
+                sheet[f'{col}{next_row}'] = value
 
-    # Lưu lại tệp Excel
-    workbook.save('handle\dir_save\TrichXuatThongTinCoSan.xlsx')
-    # workbook.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
-    # workbook.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+        # Lưu lại tệp Excel
+        workbook.save('handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+        # workbook.save(r'D:\learn\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+        # workbook.save(r'C:\workspace\doanhethongthongminh\VN-cccd-OCR\app\handle\dir_save\TrichXuatThongTinCoSan.xlsx')
+    except Exception as e:
+        raise HTTPException(status_code=400, detail='Trích xuất thông tin không thành công, Vui lòng chọn ảnh khác')
 
 # done save_excel
 def save_excel(excel_data, file_path):
