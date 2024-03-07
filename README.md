@@ -1,2 +1,2 @@
-# fillTextDocx
-Text fill module in docx, for project extract_information using id card.
+### Đồ án môn AI
+Đề tài: Trích xuất thông tin từ căn cước công dân
